@@ -1,0 +1,174 @@
+version: '3.7'
+
+services:
+
+  imager-pubsub:
+    image: 'rabbitmq:3-management-alpine'
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  imager-object-store:
+    image: minio/minio:latest
+    command: server --console-address ":9001" /data/
+    environment:
+      MINIO_ACCESS_KEY: "minio-access-key"
+      MINIO_SECRET_KEY: "minio-secret-key"
+    volumes:
+      - ./volumes/minio:/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "exec 5<>/dev/tcp/localhost/9000 && echo -e 'HTTP/1.1 200 OK\r
+
+            ' >&5 || exit 1"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api-gateway:
+    build:
+      context: ../..
+      dockerfile: src/ApiGateways/Envoy/Dockerfile
+    ports:
+      - "50001:50001" # Dapr grpc
+      - "15202:8001" # Admin
+      - "5000:80" # Web http
+    depends_on:
+      imager-pubsub:
+        condition: service_healthy
+      imager-object-store:
+        condition: service_healthy
+
+  api-gateway-dapr:
+    image: 'daprio/daprd:1.12.2'
+    network_mode: 'service:api-gateway'
+    depends_on:
+      - 'api-gateway'
+    command:
+      [
+        "./daprd",
+        "--app-id",
+        "api-gateway",
+        "--app-port",
+        "80",
+        "--resources-path",
+        "/components",
+        "--config",
+        "/configuration/imager-config.yaml"
+      ]
+    volumes:
+      - "../../dapr/components/:/components"
+      - "../../dapr/configuration/:/configuration"
+
+  image-resizer-agg:
+    build:
+      context: ../..
+      dockerfile: src/ApiGateways/Aggregators/ImageResizerAggregator/Dockerfile
+    ports:
+      - "50002:50001" # Dapr grpc
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    depends_on:
+      imager-pubsub:
+        condition: service_healthy
+      imager-object-store:
+        condition: service_healthy
+
+  image-resizer-agg-dapr:
+    image: 'daprio/daprd:1.12.2'
+    network_mode: 'service:image-resizer-agg'
+    depends_on:
+      - 'image-resizer-agg'
+    command:
+      [
+        "./daprd",
+        "--app-id",
+        "image-resizer-agg",
+        "--app-port",
+        "80",
+        "--resources-path",
+        "/components",
+        "-config",
+        "/configuration/image-resizer-agg-config.yaml"
+      ]
+    volumes:
+      - "../../dapr/components/:/components"
+      - "../../dapr/configuration/:/configuration"
+
+  image-store-service:
+    build:
+      context: ../..
+      dockerfile: src/Services/ImageStoreService/Dockerfile
+    ports:
+      - "50003:50001" # Dapr grpc
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    depends_on:
+      imager-pubsub:
+        condition: service_healthy
+      imager-object-store:
+        condition: service_healthy
+
+  image-store-service-dapr:
+    image: 'daprio/daprd:1.12.2'
+    network_mode: 'service:image-store-service'
+    depends_on:
+      - 'image-store-service'
+    command:
+      [
+        "./daprd",
+        "--app-id",
+        "image-store-service",
+        "--app-port",
+        "80",
+        "--resources-path",
+        "/components",
+        "--config",
+        "/configuration/image-store-service-config.yaml"
+      ]
+    volumes:
+      - "../../dapr/components/:/components"
+      - "../../dapr/configuration/:/configuration"
+
+  image-resizer-service:
+    build:
+      context: ../..
+      dockerfile: src/Services/ImageResizerService/Dockerfile
+    ports:
+      - "50004:50001" # Dapr grpc
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    depends_on:
+      imager-pubsub:
+        condition: service_healthy
+      imager-object-store:
+        condition: service_healthy
+
+  image-resizer-service-dapr:
+    image: 'daprio/daprd:1.12.2'
+    network_mode: 'service:image-resizer-service'
+    depends_on:
+      - 'image-resizer-service'
+    command:
+      [
+        "./daprd",
+        "--app-id",
+        "image-resizer-service",
+        "--app-port",
+        "80",
+        "--resources-path",
+        "/components",
+        "--config",
+        "/configuration/image-resizer-service-config.yaml"
+      ]
+    volumes:
+      - "../../dapr/components/:/components"
+      - "../../dapr/configuration/:/configuration"

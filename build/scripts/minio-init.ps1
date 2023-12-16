@@ -1,0 +1,1 @@
+New-Item -Path "$PSScriptRoot/../docker/volumes/minio/temp-images" -ItemType Directory -ProgressAction SilentlyContinue -ErrorAction SilentlyContinue

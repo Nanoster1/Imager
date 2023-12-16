@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapr.AspNetCore" Version="1.12.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
+    <PackageReference Include="NetEscapades.Configuration.Yaml" Version="3.1.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Core\Imager.Extensions.Configuration\Imager.Extensions.Configuration.csproj" />
+    <ProjectReference Include="..\Imager.ImageResizerAggregator.Contracts\Imager.ImageResizerAggregator.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\..\Services\ImageResizerService\Imager.ImageResizerService.Contracts\Imager.ImageResizerService.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\..\Core\Imager.Dapr\Imager.Dapr.csproj" />
+    <ProjectReference Include="..\..\..\..\Services\ImageStoreService\Imager.ImageStoreService.Contracts\Imager.ImageStoreService.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+    <Content Include="appsettings.Development.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+</Project>

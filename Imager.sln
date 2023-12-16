@@ -1,0 +1,125 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D77FCCBD-1CE6-4A6D-B66C-D1ADBD73655D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateways", "ApiGateways", "{B99FD8C4-1EF9-4A2E-AB50-8DDAB810D0F6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aggregators", "Aggregators", "{3CEEE5BB-DEDE-49AD-8E0B-5E91101CC0E0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ImageResizerAggregator", "ImageResizerAggregator", "{BDA4E024-8244-4210-A848-39296F072BDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imager.ImageResizerAggregator.Server", "src\ApiGateways\Aggregators\ImageResizerAggregator\Imager.ImageResizerAggregator.Server\Imager.ImageResizerAggregator.Server.csproj", "{19F3C0E6-AC86-419E-8CD0-93D9D2EBC52A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{A22BA707-A6FC-4427-8031-073AB0712906}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ImageResizerService", "ImageResizerService", "{60730C79-2ABD-4B39-A595-D16A5C3A0BD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imager.ImageResizerService.Server", "src\Services\ImageResizerService\Imager.ImageResizerService.Server\Imager.ImageResizerService.Server.csproj", "{87E1F915-3208-4EA6-A292-C956DA77A4C2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ImageStoreService", "ImageStoreService", "{583820AB-610E-417C-9DB8-605E36339DF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imager.ImageStoreService.Server", "src\Services\ImageStoreService\Imager.ImageStoreService.Server\Imager.ImageStoreService.Server.csproj", "{7EC5A3EB-20F4-4A5A-866F-101F1BFF6E6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imager.ImageResizerService.Contracts", "src\Services\ImageResizerService\Imager.ImageResizerService.Contracts\Imager.ImageResizerService.Contracts.csproj", "{CFCA0AA6-3941-4FF5-8660-179C03F86295}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{D453B22B-D5E6-4C17-8C94-C2B198D8B7D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imager.Extensions.Configuration", "src\Core\Imager.Extensions.Configuration\Imager.Extensions.Configuration.csproj", "{409E7561-6794-4EDB-BEA2-168FF3C9744B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imager.ImageStoreService.Contracts", "src\Services\ImageStoreService\Imager.ImageStoreService.Contracts\Imager.ImageStoreService.Contracts.csproj", "{DCA228FF-07A2-4E3A-890B-5F0B6034964E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imager.ImageResizerAggregator.Contracts", "src\ApiGateways\Aggregators\ImageResizerAggregator\Imager.ImageResizerAggregator.Contracts\Imager.ImageResizerAggregator.Contracts.csproj", "{8DB63780-7B95-477C-BD5F-808DBAE2B060}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imager.Dapr", "src\Core\Imager.Dapr\Imager.Dapr.csproj", "{CAA4C128-74A6-4244-8FEE-3C9AE240AA9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imager.Dapr.S3", "src\Core\Imager.Dapr.S3\Imager.Dapr.S3.csproj", "{3A86D613-293A-4A9B-8B54-146A2923FE98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imager.ImageStoreService.Core", "src\Services\ImageStoreService\Imager.ImageStoreService.Core\Imager.ImageStoreService.Core.csproj", "{8F007F48-5010-4ECF-BE3C-0BD7DC7DAF2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imager.ImageStoreService.Data", "src\Services\ImageStoreService\Imager.ImageStoreService.Data\Imager.ImageStoreService.Data.csproj", "{50B39CF5-C4A6-4402-B2A1-6E92FD1DC7C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imager.ImageResizerService.Core", "src\Services\ImageResizerService\Imager.ImageResizerService.Core\Imager.ImageResizerService.Core.csproj", "{4B9E5911-4F68-4607-90C8-A011AD465C79}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{19F3C0E6-AC86-419E-8CD0-93D9D2EBC52A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19F3C0E6-AC86-419E-8CD0-93D9D2EBC52A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19F3C0E6-AC86-419E-8CD0-93D9D2EBC52A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19F3C0E6-AC86-419E-8CD0-93D9D2EBC52A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87E1F915-3208-4EA6-A292-C956DA77A4C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87E1F915-3208-4EA6-A292-C956DA77A4C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87E1F915-3208-4EA6-A292-C956DA77A4C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87E1F915-3208-4EA6-A292-C956DA77A4C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EC5A3EB-20F4-4A5A-866F-101F1BFF6E6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EC5A3EB-20F4-4A5A-866F-101F1BFF6E6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EC5A3EB-20F4-4A5A-866F-101F1BFF6E6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EC5A3EB-20F4-4A5A-866F-101F1BFF6E6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFCA0AA6-3941-4FF5-8660-179C03F86295}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFCA0AA6-3941-4FF5-8660-179C03F86295}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFCA0AA6-3941-4FF5-8660-179C03F86295}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFCA0AA6-3941-4FF5-8660-179C03F86295}.Release|Any CPU.Build.0 = Release|Any CPU
+		{409E7561-6794-4EDB-BEA2-168FF3C9744B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{409E7561-6794-4EDB-BEA2-168FF3C9744B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{409E7561-6794-4EDB-BEA2-168FF3C9744B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{409E7561-6794-4EDB-BEA2-168FF3C9744B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCA228FF-07A2-4E3A-890B-5F0B6034964E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCA228FF-07A2-4E3A-890B-5F0B6034964E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCA228FF-07A2-4E3A-890B-5F0B6034964E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCA228FF-07A2-4E3A-890B-5F0B6034964E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DB63780-7B95-477C-BD5F-808DBAE2B060}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DB63780-7B95-477C-BD5F-808DBAE2B060}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DB63780-7B95-477C-BD5F-808DBAE2B060}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DB63780-7B95-477C-BD5F-808DBAE2B060}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAA4C128-74A6-4244-8FEE-3C9AE240AA9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAA4C128-74A6-4244-8FEE-3C9AE240AA9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAA4C128-74A6-4244-8FEE-3C9AE240AA9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAA4C128-74A6-4244-8FEE-3C9AE240AA9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A86D613-293A-4A9B-8B54-146A2923FE98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A86D613-293A-4A9B-8B54-146A2923FE98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A86D613-293A-4A9B-8B54-146A2923FE98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A86D613-293A-4A9B-8B54-146A2923FE98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F007F48-5010-4ECF-BE3C-0BD7DC7DAF2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F007F48-5010-4ECF-BE3C-0BD7DC7DAF2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F007F48-5010-4ECF-BE3C-0BD7DC7DAF2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F007F48-5010-4ECF-BE3C-0BD7DC7DAF2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50B39CF5-C4A6-4402-B2A1-6E92FD1DC7C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50B39CF5-C4A6-4402-B2A1-6E92FD1DC7C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50B39CF5-C4A6-4402-B2A1-6E92FD1DC7C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50B39CF5-C4A6-4402-B2A1-6E92FD1DC7C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B9E5911-4F68-4607-90C8-A011AD465C79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B9E5911-4F68-4607-90C8-A011AD465C79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B9E5911-4F68-4607-90C8-A011AD465C79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B9E5911-4F68-4607-90C8-A011AD465C79}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B99FD8C4-1EF9-4A2E-AB50-8DDAB810D0F6} = {D77FCCBD-1CE6-4A6D-B66C-D1ADBD73655D}
+		{3CEEE5BB-DEDE-49AD-8E0B-5E91101CC0E0} = {B99FD8C4-1EF9-4A2E-AB50-8DDAB810D0F6}
+		{BDA4E024-8244-4210-A848-39296F072BDF} = {3CEEE5BB-DEDE-49AD-8E0B-5E91101CC0E0}
+		{19F3C0E6-AC86-419E-8CD0-93D9D2EBC52A} = {BDA4E024-8244-4210-A848-39296F072BDF}
+		{A22BA707-A6FC-4427-8031-073AB0712906} = {D77FCCBD-1CE6-4A6D-B66C-D1ADBD73655D}
+		{60730C79-2ABD-4B39-A595-D16A5C3A0BD6} = {A22BA707-A6FC-4427-8031-073AB0712906}
+		{87E1F915-3208-4EA6-A292-C956DA77A4C2} = {60730C79-2ABD-4B39-A595-D16A5C3A0BD6}
+		{583820AB-610E-417C-9DB8-605E36339DF1} = {A22BA707-A6FC-4427-8031-073AB0712906}
+		{7EC5A3EB-20F4-4A5A-866F-101F1BFF6E6F} = {583820AB-610E-417C-9DB8-605E36339DF1}
+		{CFCA0AA6-3941-4FF5-8660-179C03F86295} = {60730C79-2ABD-4B39-A595-D16A5C3A0BD6}
+		{D453B22B-D5E6-4C17-8C94-C2B198D8B7D5} = {D77FCCBD-1CE6-4A6D-B66C-D1ADBD73655D}
+		{409E7561-6794-4EDB-BEA2-168FF3C9744B} = {D453B22B-D5E6-4C17-8C94-C2B198D8B7D5}
+		{DCA228FF-07A2-4E3A-890B-5F0B6034964E} = {583820AB-610E-417C-9DB8-605E36339DF1}
+		{8DB63780-7B95-477C-BD5F-808DBAE2B060} = {BDA4E024-8244-4210-A848-39296F072BDF}
+		{CAA4C128-74A6-4244-8FEE-3C9AE240AA9A} = {D453B22B-D5E6-4C17-8C94-C2B198D8B7D5}
+		{3A86D613-293A-4A9B-8B54-146A2923FE98} = {D453B22B-D5E6-4C17-8C94-C2B198D8B7D5}
+		{8F007F48-5010-4ECF-BE3C-0BD7DC7DAF2E} = {583820AB-610E-417C-9DB8-605E36339DF1}
+		{50B39CF5-C4A6-4402-B2A1-6E92FD1DC7C5} = {583820AB-610E-417C-9DB8-605E36339DF1}
+		{4B9E5911-4F68-4607-90C8-A011AD465C79} = {60730C79-2ABD-4B39-A595-D16A5C3A0BD6}
+	EndGlobalSection
+EndGlobal

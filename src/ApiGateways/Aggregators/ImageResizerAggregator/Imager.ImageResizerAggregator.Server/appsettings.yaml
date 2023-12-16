@@ -1,0 +1,14 @@
+Logging:
+  LogLevel:
+    Default: Information
+    Microsoft.AspNetCore: Warning
+AllowedHosts: "*"
+Serilog:
+  MinimumLevel: "Information"
+  Enrich: ["FromLogContext"]
+  WriteTo:
+    - Name: "Console"
+    - Name: "File"
+      Args:
+        path: "log.log"
+        fileSizeLimitBytes: 10000000
