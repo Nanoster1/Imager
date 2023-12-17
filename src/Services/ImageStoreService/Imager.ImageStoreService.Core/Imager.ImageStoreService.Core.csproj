@@ -10,5 +10,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\Imager.Dapr.S3\Imager.Dapr.S3.csproj" />
+    <ProjectReference Include="..\..\..\Core\Imager.Dapr\Imager.Dapr.csproj" />
   </ItemGroup>
 </Project>

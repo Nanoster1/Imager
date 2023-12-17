@@ -1,7 +1,6 @@
 using Imager.ImageResizerAggregator.Server.Configuration;
 using Imager.ImageStoreService.Contracts.Routes;
 using Imager.ImageStoreService.Core;
-using Imager.ImageStoreService.Data;
 using Imager.ImageStoreService.Server.Logging;
 using Imager.ImageStoreService.Server.Mapping;
 
@@ -20,8 +19,7 @@ var logging = builder.Logging;
 var services = builder.Services;
 {
     services.AddCore(configuration);
-    services.AddData(configuration);
-    services.AddMappers();
+    services.AddMapping();
     services.AddControllers();
 }
 

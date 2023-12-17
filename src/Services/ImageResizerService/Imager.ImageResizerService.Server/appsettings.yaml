@@ -12,3 +12,5 @@ Serilog:
       Args:
         path: "log.log"
         fileSizeLimitBytes: 10000000
+ConnectionStrings:
+  ImageStoreService: "http://image-store-service"

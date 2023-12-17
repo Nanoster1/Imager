@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using Imager.ImageStoreService.Contracts.HttpRequests;
 using Imager.ImageStoreService.Contracts.HttpResponses;
-using Imager.ImageStoreService.Core.Domains.TempImages.Commands.CreateTempImages;
-using Imager.ImageStoreService.Core.Domains.TempImages.Queries.GetTempImage;
-using Imager.ImageStoreService.Core.Domains.TempImages.Results;
+using Imager.ImageStoreService.Core.TempImages.Commands.CreateTempImages;
+using Imager.ImageStoreService.Core.TempImages.Queries.GetTempImage;
+using Imager.ImageStoreService.Core.TempImages.Results;
 using Imager.ImageStoreService.Server.Mapping.Mappers.Interfaces;
 
 namespace Imager.ImageStoreService.Server.Mapping
@@ -15,9 +15,9 @@ namespace Imager.ImageStoreService.Server.Mapping
         {
             return p1 == null ? null : new CreateTempImagesCommand(p1.UserId, funcMain1(p1.Images));
         }
-        public CreateTempImageResponse Map(CreateTempImageResult p4)
+        public CreateTempImagesResponse Map(CreateTempImagesResult p4)
         {
-            return p4 == null ? null : new CreateTempImageResponse(funcMain3(p4.ImagesIds));
+            return p4 == null ? null : new CreateTempImagesResponse(funcMain3(p4.ImagesIds));
         }
         public GetTempImageQuery Map(GetTempImageRequest p6)
         {

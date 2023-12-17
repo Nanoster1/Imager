@@ -2,7 +2,7 @@ using System.Reflection;
 
 using Mapster;
 
-namespace Imager.ImageStoreService.Server.Mapping;
+namespace Imager.ImageResizerService.Server.Mapping;
 
 public static class Module
 {

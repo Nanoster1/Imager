@@ -14,7 +14,6 @@
     <ProjectReference Include="..\..\..\Core\Imager.Extensions.Configuration\Imager.Extensions.Configuration.csproj" />
     <ProjectReference Include="..\Imager.ImageStoreService.Contracts\Imager.ImageStoreService.Contracts.csproj" />
     <ProjectReference Include="..\Imager.ImageStoreService.Core\Imager.ImageStoreService.Core.csproj" />
-    <ProjectReference Include="..\Imager.ImageStoreService.Data\Imager.ImageStoreService.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>
