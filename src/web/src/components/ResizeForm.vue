@@ -1,46 +1,54 @@
 <template>
-  <div class="d-flex gap-5 justify-content-center">
-    <!-- <v-file-input
-      v-model="photo"
-      class="wrapper hedline-lg"
-      label="Нажмите сюда, чтобы загрузить фото"
-    >
-    </v-file-input> -->
-
-    <div class="wrapper d-flex align-items-center">
-      <input
-        class="loader"
-        type="file"
-        @input="fileToBinary"
-      />
-      <span
-        class="headline-lg"
-        v-html="headline"
-      >
-      </span>
-    </div>
-
-    <div class="controls d-flex flex-column gap-5 justify-content-between">
-      <div class="inputs d-flex flex-column">
-        <v-text-field
-          label="Ширина, в пикселях"
-          variant="outlined"
+  <div class="d-flex flex-column gap-5 justify-content-center">
+    <div>
+      <div class="wrapper d-flex align-items-center">
+        <input
+          class="loader"
+          type="file"
+          accept="image/*"
+          multiple
+          @input="fileToBinary"
         />
-
-        <v-text-field
-          label="Высота, в пикселях"
-          variant="outlined"
-        />
+        <span
+          class="headline-lg"
+          v-html="headline"
+        >
+        </span>
       </div>
 
-      <v-btn
-        class="button"
-        size="x-large"
-        variant="tonal"
-        @click="sendFetch"
-      >
-        Button
-      </v-btn>
+      <div class="controls d-flex flex-column gap-5 justify-content-between">
+        <div class="inputs d-flex flex-column">
+          <v-text-field
+            v-model="width"
+            label="Ширина, в пикселях"
+            variant="outlined"
+          />
+
+          <v-text-field
+            v-model="height"
+            label="Высота, в пикселях"
+            variant="outlined"
+          />
+        </div>
+
+        <v-btn
+          class="button"
+          size="x-large"
+          variant="tonal"
+          @click="sendFetch"
+        >
+          Изменить размер
+        </v-btn>
+      </div>
+    </div>
+
+    <div v-if="!!files">
+      <h3 class="headline-sm">Список загруженных файлов</h3>
+      <span
+        v-for="file in files"
+        :key="file"
+        >{{ file }}
+      </span>
     </div>
   </div>
 </template>
@@ -61,8 +69,8 @@ export default {
 
   data() {
     return {
-      fileName: "",
-      binaryFile: null,
+      files: [],
+      binaryFiles: null,
       width: 0,
       height: 0
     };
@@ -72,17 +80,17 @@ export default {
     headline() {
       return !this.fileName
         ? "Нажмите, чтобы загрузить изображение"
-        : `Файл <br/> <strong>${this.fileName}</strong> <br/> успешно загружен. <br/> <br/> Нажмите еще раз, если хотите загрузить другой файл`;
+        : `Файл(ы) успешно загружен(ы). <br/> <br/> Нажмите еще раз, если хотите загрузить другой файл`;
     }
   },
 
   methods: {
     fileToBinary(event) {
       const reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-      this.fileName = event.target.files[0].name;
+      reader.readAsDataURL(event.target.files);
+      this.files = event.target.files.name;
       reader.onload = () => {
-        this.binaryFile = reader.result;
+        this.binaryFiles = reader.result;
       };
     },
 
@@ -91,7 +99,9 @@ export default {
       console.log(accessToken);
       fetch("http://localhost:5000/resize", {
         method: "POST",
-        authorization: `Bearer ${accessToken}`
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
       });
     }
   }
