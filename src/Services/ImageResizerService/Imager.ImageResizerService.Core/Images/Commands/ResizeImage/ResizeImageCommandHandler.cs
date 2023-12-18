@@ -4,6 +4,7 @@ using Imager.ImageResizerService.Core.Common.Services.Interfaces;
 
 using Imager.ImageResizerService.Core.Images.Results;
 using Imager.ImageStoreService.Contracts.HttpRequests;
+using Imager.ImageStoreService.Contracts.Models;
 
 using MediatR;
 
@@ -17,15 +18,16 @@ public class ResizeImageCommandHandler(ITempImageService tempImageService) : IRe
 
     public async Task<ErrorOr<ResizeImageResult>> Handle(ResizeImageCommand request, CancellationToken cancellationToken)
     {
-        if (!Enum.TryParse<SKEncodedImageFormat>(request.ImageFormat, true, out var imageFormat))
-        {
-            return Error.Failure($"Invalid image format: {request.ImageFormat ?? "null"}");
-        }
-
         var getTempImageRequest = new GetTempImageRequest(request.ImageId, request.UserId);
         var getTempImageResponse = await _tempImageService.GetImageAsync(getTempImageRequest, cancellationToken);
 
-        using var sourceBitmap = SKBitmap.Decode(getTempImageResponse.Image);
+        var format = getTempImageResponse.Image.Format;
+        if (!Enum.TryParse<SKEncodedImageFormat>(format, true, out var imageFormat))
+        {
+            return Error.Failure($"Invalid image format: {format ?? "null"}");
+        }
+
+        using var sourceBitmap = SKBitmap.Decode(getTempImageResponse.Image.ImageInBytes);
         var resizedInfo = new SKImageInfo(request.Width, request.Height);
         using SKBitmap resizedBitmap = sourceBitmap.Resize(resizedInfo, SKFilterQuality.High);
         if (resizedBitmap == null) return Error.Failure("Failed to resize image");
@@ -33,9 +35,10 @@ public class ResizeImageCommandHandler(ITempImageService tempImageService) : IRe
         using SKData encodedData = resizedImage.Encode(imageFormat, 100);
         var resizedImageInBytes = encodedData.ToArray();
 
-        var createTempImagesRequest = new CreateTempImagesRequest(request.UserId, [resizedImageInBytes]);
+        var tempImageFileModel = new TempImageFileModel(resizedImageInBytes, format);
+        var createTempImagesRequest = new CreateTempImagesRequest(request.UserId, [tempImageFileModel]);
         var createTempImagesResponse = await _tempImageService.CreateImageAsync(createTempImagesRequest, cancellationToken);
 
-        return new ResizeImageResult(request.UserId, createTempImagesResponse.ImagesIds[0]);
+        return new ResizeImageResult(request.UserId, createTempImagesResponse.ImageIds[0]);
     }
 }

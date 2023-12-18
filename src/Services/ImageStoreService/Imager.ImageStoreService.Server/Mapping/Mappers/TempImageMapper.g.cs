@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using Imager.ImageStoreService.Contracts.HttpRequests;
 using Imager.ImageStoreService.Contracts.HttpResponses;
 using Imager.ImageStoreService.Core.TempImages.Commands.CreateTempImages;
+using Imager.ImageStoreService.Core.TempImages.Models;
 using Imager.ImageStoreService.Core.TempImages.Queries.GetTempImage;
 using Imager.ImageStoreService.Core.TempImages.Results;
 using Imager.ImageStoreService.Server.Mapping.Mappers.Interfaces;
+
+using TempImageFileModel2 = Imager.ImageStoreService.Contracts.Models.TempImageFileModel;
 
 namespace Imager.ImageStoreService.Server.Mapping
 {
@@ -15,33 +18,33 @@ namespace Imager.ImageStoreService.Server.Mapping
         {
             return p1 == null ? null : new CreateTempImagesCommand(p1.UserId, funcMain1(p1.Images));
         }
-        public CreateTempImagesResponse Map(CreateTempImagesResult p4)
+        public CreateTempImagesResponse Map(CreateTempImagesResult p5)
         {
-            return p4 == null ? null : new CreateTempImagesResponse(funcMain3(p4.ImagesIds));
+            return p5 == null ? null : new CreateTempImagesResponse(funcMain4(p5.ImagesIds));
         }
-        public GetTempImageQuery Map(GetTempImageRequest p6)
+        public GetTempImageQuery Map(GetTempImageRequest p7)
         {
-            return p6 == null ? null : new GetTempImageQuery(p6.ImageId, p6.UserId);
+            return p7 == null ? null : new GetTempImageQuery(p7.ImageId, p7.UserId);
         }
-        public GetTempImageResponse Map(GetTempImageResult p7)
+        public GetTempImageResponse Map(GetTempImageResult p8)
         {
-            return p7 == null ? null : new GetTempImageResponse(p7.ImageId, funcMain4(p7.Image));
+            return p8 == null ? null : new GetTempImageResponse(p8.ImageId, funcMain5(p8.Image));
         }
         
-        private List<byte[]> funcMain1(List<byte[]> p2)
+        private List<TempImageFileModel> funcMain1(List<TempImageFileModel2> p2)
         {
             if (p2 == null)
             {
                 return null;
             }
-            List<byte[]> result = new List<byte[]>(p2.Count);
+            List<TempImageFileModel> result = new List<TempImageFileModel>(p2.Count);
             
             int i = 0;
             int len = p2.Count;
             
             while (i < len)
             {
-                byte[] item = p2[i];
+                TempImageFileModel2 item = p2[i];
                 result.Add(funcMain2(item));
                 i++;
             }
@@ -49,20 +52,20 @@ namespace Imager.ImageStoreService.Server.Mapping
             
         }
         
-        private List<string> funcMain3(List<string> p5)
+        private List<string> funcMain4(List<string> p6)
         {
-            if (p5 == null)
+            if (p6 == null)
             {
                 return null;
             }
-            List<string> result = new List<string>(p5.Count);
+            List<string> result = new List<string>(p6.Count);
             
             int i = 0;
-            int len = p5.Count;
+            int len = p6.Count;
             
             while (i < len)
             {
-                string item = p5[i];
+                string item = p6[i];
                 result.Add(item);
                 i++;
             }
@@ -70,26 +73,36 @@ namespace Imager.ImageStoreService.Server.Mapping
             
         }
         
-        private byte[] funcMain4(byte[] p8)
+        private TempImageFileModel2 funcMain5(TempImageFileModel p9)
         {
-            if (p8 == null)
+            return p9 == null ? null : new TempImageFileModel2(funcMain6(p9.ImageInBytes), p9.Format);
+        }
+        
+        private TempImageFileModel funcMain2(TempImageFileModel2 p3)
+        {
+            return p3 == null ? null : new TempImageFileModel(funcMain3(p3.ImageInBytes), p3.Format);
+        }
+        
+        private byte[] funcMain6(byte[] p10)
+        {
+            if (p10 == null)
             {
                 return null;
             }
-            byte[] result = new byte[p8.Length];
-            Array.Copy(p8, 0, result, 0, p8.Length);
+            byte[] result = new byte[p10.Length];
+            Array.Copy(p10, 0, result, 0, p10.Length);
             return result;
             
         }
         
-        private byte[] funcMain2(byte[] p3)
+        private byte[] funcMain3(byte[] p4)
         {
-            if (p3 == null)
+            if (p4 == null)
             {
                 return null;
             }
-            byte[] result = new byte[p3.Length];
-            Array.Copy(p3, 0, result, 0, p3.Length);
+            byte[] result = new byte[p4.Length];
+            Array.Copy(p4, 0, result, 0, p4.Length);
             return result;
             
         }

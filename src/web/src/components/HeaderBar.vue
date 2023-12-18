@@ -1,8 +1,15 @@
 <template>
   <div class="d-flex align-items-center justify-content-between px-2 py-2">
     <h1 class="headline-lg">Imager</h1>
-    <h1>{{ status.isAuthorized }}</h1>
-    <v-btn @click="handler">{{ buttonTitle }}</v-btn>
+    <div class="d-flex gap-5 align-items-center">
+      <span
+        v-if="status.isAuthorized"
+        class="title-md"
+      >
+        {{ user.sy.Zf }}
+      </span>
+      <v-btn @click="handler">{{ buttonTitle }}</v-btn>
+    </div>
   </div>
 </template>
 
@@ -28,6 +35,10 @@ export default {
     buttonTitle() {
       return this.status.isAuthorized ? "Выйти" : "Войти";
     }
+  },
+
+  mounted() {
+    this.user = JSON.parse(window.localStorage.getItem("user"));
   },
 
   methods: {

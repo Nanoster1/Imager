@@ -24,21 +24,10 @@ var services = builder.Services;
     services.AddControllers().AddDapr();
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen();
-    services.AddCors(options =>
-    {
-        options.AddDefaultPolicy(policy =>
-        {
-            policy.AllowAnyHeader()
-                .AllowCredentials()
-                .AllowAnyMethod()
-                .AllowAnyOrigin();
-        });
-    });
 }
 
 var app = builder.Build();
 {
-    app.UseCors();
     app.UseExceptionHandler(HttpRoutes.ExceptionHandler);
     app.UseCloudEvents();
 

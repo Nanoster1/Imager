@@ -10,24 +10,24 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Imager.ImageStoreService.Server.Controllers;
 
-[Route(HttpRoutes.TempImage)]
+[Route(HttpRoutes.TempImageController)]
 public class TempImageController(
     ISender sender,
     ITempImageMapper tempImageMapper) : ApiController
 {
     private readonly ISender _sender = sender;
-    private readonly ITempImageMapper mapper = tempImageMapper;
+    private readonly ITempImageMapper _mapper = tempImageMapper;
 
     [HttpPost]
     public async Task<ActionResult<CreateTempImagesResponse>> CreateTempImage(
         [FromBody] CreateTempImagesRequest request,
         CancellationToken cancellationToken)
     {
-        var command = mapper.Map(request);
+        var command = _mapper.Map(request);
         var result = await _sender.Send(command, cancellationToken);
         return result.IsError
             ? BadRequest(result.Errors)
-            : Created(string.Empty, mapper.Map(result.Value));
+            : Created(string.Empty, _mapper.Map(result.Value));
     }
 
     [HttpGet]
@@ -35,10 +35,10 @@ public class TempImageController(
         [FromQuery] GetTempImageRequest request,
         CancellationToken cancellationToken)
     {
-        var query = mapper.Map(request);
+        var query = _mapper.Map(request);
         var result = await _sender.Send(query, cancellationToken);
         return result.IsError
             ? BadRequest(result.Errors)
-            : Ok(mapper.Map(result.Value));
+            : Ok(_mapper.Map(result.Value));
     }
 }

@@ -1,3 +1,3 @@
 namespace Imager.Dapr.Events;
 
-public record OnResizeImageEvent(string ImageId, string UserId, int Width, int Height, string ImageFormat);
+public record OnResizeImageEvent(string ImageId, string UserId, int Width, int Height);

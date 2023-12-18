@@ -10,7 +10,8 @@ using Throw;
 
 namespace Imager.Dapr.S3.Implementations;
 
-public class DaprObjectStore : IObjectStore
+public class DaprObjectStore<TObject> : IObjectStore<TObject>
+    where TObject : notnull
 {
     protected readonly Uri _daprUri;
     protected readonly HttpClient _client;
@@ -24,12 +25,11 @@ public class DaprObjectStore : IObjectStore
 
     }
 
-    public virtual async Task<CreateObjectResponse> CreateObjectAsync<TObject>(
+    public virtual async Task<CreateObjectResponse> CreateObjectAsync(
         ObjectStoreKey key,
         TObject data,
         string? presignTTL = null,
         CancellationToken cancellationToken = default)
-        where TObject : notnull
     {
         data.ThrowIfNull();
         key.ThrowIfNull();
@@ -69,10 +69,9 @@ public class DaprObjectStore : IObjectStore
         response.EnsureSuccessStatusCode();
     }
 
-    public virtual async Task<ObjectData<TObject>?> GetObjectAsync<TObject>(
+    public virtual async Task<ObjectData<TObject>?> GetObjectAsync(
         ObjectStoreKey key,
         CancellationToken cancellationToken = default)
-        where TObject : notnull
     {
         key.ThrowIfNull();
 

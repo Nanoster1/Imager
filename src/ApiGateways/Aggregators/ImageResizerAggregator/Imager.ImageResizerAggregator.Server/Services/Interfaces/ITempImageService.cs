@@ -8,9 +8,9 @@ namespace Imager.ImageResizerAggregator.Server.Services.Interfaces;
 
 public interface ITempImageService
 {
-    [Get(ImageStoreRoutes.TempImage)]
-    Task<GetTempImageResponse> GetImageAsync([Query] GetTempImageRequest request, CancellationToken cancellationToken);
+    [Get(ImageStoreRoutes.TempImageController)]
+    Task<GetTempImageResponse> GetTempImageAsync([Query] GetTempImageRequest request, CancellationToken cancellationToken);
 
-    [Post(ImageStoreRoutes.TempImage)]
-    Task<CreateTempImagesResponse> CreateImageAsync([Body] CreateTempImagesRequest request, CancellationToken cancellationToken);
+    [Post(ImageStoreRoutes.TempImageController)]
+    Task<CreateTempImagesResponse> CreateTempImagesAsync([Body] CreateTempImagesRequest request, CancellationToken cancellationToken);
 }

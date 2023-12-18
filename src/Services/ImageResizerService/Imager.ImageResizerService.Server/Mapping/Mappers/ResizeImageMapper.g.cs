@@ -9,7 +9,7 @@ namespace Imager.ImageResizerService.Server.Mapping
     {
         public ResizeImageCommand Map(OnResizeImageEvent p1)
         {
-            return p1 == null ? null : new ResizeImageCommand(p1.ImageId, p1.UserId, p1.Width, p1.Height, p1.ImageFormat);
+            return p1 == null ? null : new ResizeImageCommand(p1.ImageId, p1.UserId, p1.Width, p1.Height);
         }
         public OnImageResizedEvent Map(ResizeImageResult p2)
         {

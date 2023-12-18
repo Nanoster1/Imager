@@ -1,4 +1,4 @@
-using Imager.ImageResizerAggregator.Server.Authentication.Validators;
+using Imager.ImageResizerAggregator.Server.Authentication.Handlers;
 
 using Microsoft.AspNetCore.Authentication;
 
@@ -10,12 +10,6 @@ public static class GoogleScheme
 
     public static void AddGoogleScheme(this AuthenticationBuilder builder)
     {
-        builder.AddJwtBearer(SchemeName, options =>
-        {
-            options.RequireHttpsMetadata = false;
-            options.SaveToken = true;
-            options.TokenHandlers.Clear();
-            options.TokenHandlers.Add(new GoogleTokenHandler());
-        });
+        builder.AddScheme<GoogleAuthenticationOptions, GoogleAuthenticationHandler>(SchemeName, null);
     }
 }

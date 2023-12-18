@@ -1,0 +1,30 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: imager-images
+spec:
+  type: bindings.aws.s3
+  version: v1
+  metadata:
+    - name: bucket
+      value: "images"
+    - name: region
+      value: "us-east-1"
+    - name: endpoint
+      value: "http://imager-object-store:9000"
+    - name: forcePathStyle
+      value: true
+    - name: disableSSL
+      value: true
+    - name: decodeBase64
+      value: true
+    - name: accessKey
+      secretKeyRef:
+        name: "Minio:AccessKey"
+        key: "Minio:AccessKey"
+    - name: secretKey
+      secretKeyRef:
+        name: "Minio:SecretKey"
+        key: "Minio:SecretKey"
+auth:
+  secretStore: imager-secretstore
