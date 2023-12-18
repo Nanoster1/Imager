@@ -17,15 +17,6 @@
       "sourceFileMap": {
         "/src": "${workspaceFolder}"
       }
-    },
-    {
-      "name": "Docker .NET Container SDK Launch",
-      "type": "docker",
-      "request": "launch",
-      "netCore": {
-        "appProject": "${workspaceFolder}/build/docker/docker-compose.dcproj",
-        "buildWithSdk": true
-      }
     }
   ]
 }
