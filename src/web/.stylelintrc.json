@@ -1,0 +1,121 @@
+{
+  "extends": [
+    "stylelint-config-standard-scss",
+    "stylelint-config-standard-vue/scss",
+    "stylelint-config-clean-order/error"
+  ],
+  "cache": true,
+  "overrides": [
+    {
+      "files": [
+        "*.vue",
+        "**/*.vue",
+        "*.scss",
+        "**/*.scss"
+      ],
+      "rules": {
+        "declaration-property-unit-allowed-list": {
+          "/^animation/": "s"
+        },
+        "value-keyword-case": [
+          "lower",
+          {
+            "ignoreKeywords": [
+              "Roboto",
+              "Inter",
+              "BlinkMacSystemFont",
+              "Oxygen",
+              "Ubuntu",
+              "Cantarell"
+            ],
+            "ignoreFunctions": [
+              "v-bind"
+            ],
+            "camelCaseSvgKeywords": true,
+            "message": "Значения должны быть в нижнем регистре"
+          }
+        ],
+        "rule-empty-line-before": [
+          "always-multi-line",
+          {
+            "except": [
+              "after-single-line-comment",
+              "first-nested"
+            ],
+            "message": "Ожидается пустая строка перед правилом"
+          }
+        ],
+        "scss/dollar-variable-empty-line-before": [
+          "always",
+          {
+            "except": [
+              "first-nested"
+            ],
+            "ignore": [
+              "after-dollar-variable"
+            ],
+            "message": "Ожидается пустая строка перед $-переменной"
+          }
+        ],
+        "block-no-empty": [
+          true,
+          {
+            "message": "Пустых блоков быть не должно"
+          }
+        ],
+        "declaration-block-no-duplicate-properties": [
+          true,
+          {
+            "message": "Дублирующиеся правила"
+          }
+        ],
+        "declaration-block-no-shorthand-property-overrides": [
+          true,
+          {
+            "message": "Сокращенная запись перезапишет стили, заданные выше"
+          }
+        ],
+        "declaration-block-single-line-max-declarations": [
+          1,
+          {
+            "message": "В строке должно быть только одно правило"
+          }
+        ],
+        "length-zero-no-unit": [
+          true,
+          {
+            "message": "Нулевым значениям можно не указывать единицы измерения"
+          }
+        ],
+        "no-duplicate-selectors": [
+          true,
+          {
+            "message": "Обнаружено дублирование селекторов"
+          }
+        ],
+        "number-max-precision": [
+          3,
+          {
+            "message": "В значениях достаточно 3-х знаков после запятой"
+          }
+        ],
+        "selector-pseudo-element-colon-notation": [
+          "double",
+          {
+            "message": "Для псевдоэлементов следует использовать двойное двоеточие"
+          }
+        ],
+        "unit-no-unknown": [
+          true,
+          {
+            "message": "Некорректные единицы измерения"
+          }
+        ],
+        "custom-property-empty-line-before": "never",
+        "value-no-vendor-prefix": null,
+        "property-no-vendor-prefix": null,
+        "media-query-no-invalid": null
+      }
+    }
+  ]
+}
