@@ -10,35 +10,35 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Imager.ImageStoreService.Server.Controllers;
 
-[Route(HttpRoutes.Controllers.TempImageController)]
+[Route(HttpRoutes.TempImage)]
 public class TempImageController(
     ISender sender,
     ITempImageMapper tempImageMapper) : ApiController
 {
     private readonly ISender _sender = sender;
-    private readonly ITempImageMapper _tempImageMapper = tempImageMapper;
+    private readonly ITempImageMapper mapper = tempImageMapper;
 
     [HttpPost]
-    public async Task<ActionResult<CreateTempImageResponse>> CreateTempImage(
+    public async Task<ActionResult<CreateTempImagesResponse>> CreateTempImage(
         [FromBody] CreateTempImagesRequest request,
         CancellationToken cancellationToken)
     {
-        var command = _tempImageMapper.Map(request);
+        var command = mapper.Map(request);
         var result = await _sender.Send(command, cancellationToken);
         return result.IsError
             ? BadRequest(result.Errors)
-            : Created(string.Empty, _tempImageMapper.Map(result.Value));
+            : Created(string.Empty, mapper.Map(result.Value));
     }
 
     [HttpGet]
     public async Task<ActionResult<GetTempImageResponse>> GetTempImage(
-        [FromQuery] GetTempImageRequest request, [FromServices] ILogger<TempImageController> logger,
+        [FromQuery] GetTempImageRequest request,
         CancellationToken cancellationToken)
     {
-        var query = _tempImageMapper.Map(request);
+        var query = mapper.Map(request);
         var result = await _sender.Send(query, cancellationToken);
         return result.IsError
             ? BadRequest(result.Errors)
-            : Ok(_tempImageMapper.Map(result.Value));
+            : Ok(mapper.Map(result.Value));
     }
 }

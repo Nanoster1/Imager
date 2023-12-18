@@ -1,6 +1,8 @@
 using Imager.ImageResizerAggregator.Contracts.Routes;
+using Imager.ImageResizerAggregator.Server.Authentication;
 using Imager.ImageResizerAggregator.Server.Configuration;
 using Imager.ImageResizerAggregator.Server.Logging;
+using Imager.ImageResizerAggregator.Server.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,11 +18,12 @@ var logging = builder.Logging;
 
 var services = builder.Services;
 {
-    builder.Services.AddServerSettings(configuration);
-    builder.Services.AddControllers();
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
-    builder.Services.AddDaprClient();
+    services.AddServerSettings(configuration);
+    services.AddServerSignalR();
+    services.AddServerAuthentication();
+    services.AddControllers().AddDapr();
+    services.AddEndpointsApiExplorer();
+    services.AddSwaggerGen();
 }
 
 var app = builder.Build();
@@ -34,7 +37,12 @@ var app = builder.Build();
         app.UseSwaggerUI();
     }
 
+    app.UseAuthentication();
+    app.UseAuthorization();
+
     app.MapControllers();
+    app.MapHubs();
+    app.MapSubscribeHandler();
 }
 
 app.Run();

@@ -13,12 +13,12 @@ public static class Module
 
     private static ILoggingBuilder AddSerilog(this ILoggingBuilder builder, IConfiguration config)
     {
-        var serilogLogger = new LoggerConfiguration()
+        Log.Logger = new LoggerConfiguration()
             .ReadFrom.Configuration(config)
             .Enrich.FromLogContext()
             .CreateLogger();
 
-        builder.AddSerilog(serilogLogger);
+        builder.AddSerilog(Log.Logger);
         return builder;
     }
 }

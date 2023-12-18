@@ -2,6 +2,7 @@ using Imager.ImageResizerService.Contracts.Routes;
 using Imager.ImageResizerService.Core;
 using Imager.ImageResizerService.Server.Configuration;
 using Imager.ImageResizerService.Server.Logging;
+using Imager.ImageResizerService.Server.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,8 @@ var logging = builder.Logging;
 
 var services = builder.Services;
 {
-    services.AddCore();
+    services.AddCore(configuration);
+    services.AddMapping();
     services.AddControllers().AddDapr();
     services.AddDaprClient();
 }

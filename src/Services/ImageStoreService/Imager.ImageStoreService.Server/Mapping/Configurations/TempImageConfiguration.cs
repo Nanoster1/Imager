@@ -1,7 +1,8 @@
 using Imager.ImageStoreService.Contracts.HttpRequests;
 using Imager.ImageStoreService.Contracts.HttpResponses;
-using Imager.ImageStoreService.Core.Domains.TempImages.Commands.CreateTempImages;
-using Imager.ImageStoreService.Core.Domains.TempImages.Results;
+using Imager.ImageStoreService.Core.TempImages.Commands.CreateTempImages;
+using Imager.ImageStoreService.Core.TempImages.Queries.GetTempImage;
+using Imager.ImageStoreService.Core.TempImages.Results;
 
 using Mapster;
 
@@ -13,6 +14,8 @@ public class TempImageConfiguration : IRegister
     {
         config.RequireDestinationMemberSource = true;
         config.NewConfig<CreateTempImagesRequest, CreateTempImagesCommand>();
-        config.NewConfig<CreateTempImageResult, CreateTempImageResponse>();
+        config.NewConfig<CreateTempImagesResult, CreateTempImagesResponse>();
+        config.NewConfig<GetTempImageRequest, GetTempImageQuery>();
+        config.NewConfig<GetTempImageResult, GetTempImageResponse>();
     }
 }

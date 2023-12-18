@@ -39,8 +39,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imager.Dapr.S3", "src\Core\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imager.ImageStoreService.Core", "src\Services\ImageStoreService\Imager.ImageStoreService.Core\Imager.ImageStoreService.Core.csproj", "{8F007F48-5010-4ECF-BE3C-0BD7DC7DAF2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imager.ImageStoreService.Data", "src\Services\ImageStoreService\Imager.ImageStoreService.Data\Imager.ImageStoreService.Data.csproj", "{50B39CF5-C4A6-4402-B2A1-6E92FD1DC7C5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Imager.ImageResizerService.Core", "src\Services\ImageResizerService\Imager.ImageResizerService.Core\Imager.ImageResizerService.Core.csproj", "{4B9E5911-4F68-4607-90C8-A011AD465C79}"
 EndProject
 Global
@@ -92,10 +90,6 @@ Global
 		{8F007F48-5010-4ECF-BE3C-0BD7DC7DAF2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F007F48-5010-4ECF-BE3C-0BD7DC7DAF2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F007F48-5010-4ECF-BE3C-0BD7DC7DAF2E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{50B39CF5-C4A6-4402-B2A1-6E92FD1DC7C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{50B39CF5-C4A6-4402-B2A1-6E92FD1DC7C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{50B39CF5-C4A6-4402-B2A1-6E92FD1DC7C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{50B39CF5-C4A6-4402-B2A1-6E92FD1DC7C5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4B9E5911-4F68-4607-90C8-A011AD465C79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4B9E5911-4F68-4607-90C8-A011AD465C79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B9E5911-4F68-4607-90C8-A011AD465C79}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -119,7 +113,6 @@ Global
 		{CAA4C128-74A6-4244-8FEE-3C9AE240AA9A} = {D453B22B-D5E6-4C17-8C94-C2B198D8B7D5}
 		{3A86D613-293A-4A9B-8B54-146A2923FE98} = {D453B22B-D5E6-4C17-8C94-C2B198D8B7D5}
 		{8F007F48-5010-4ECF-BE3C-0BD7DC7DAF2E} = {583820AB-610E-417C-9DB8-605E36339DF1}
-		{50B39CF5-C4A6-4402-B2A1-6E92FD1DC7C5} = {583820AB-610E-417C-9DB8-605E36339DF1}
 		{4B9E5911-4F68-4607-90C8-A011AD465C79} = {60730C79-2ABD-4B39-A595-D16A5C3A0BD6}
 	EndGlobalSection
 EndGlobal

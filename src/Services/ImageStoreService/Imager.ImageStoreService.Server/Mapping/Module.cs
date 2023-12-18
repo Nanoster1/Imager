@@ -1,18 +1,20 @@
-using Imager.ImageStoreService.Server.Mapping.Mappers.Interfaces.Common;
+using System.Reflection;
+
+using Mapster;
 
 namespace Imager.ImageStoreService.Server.Mapping;
 
 public static class Module
 {
-    public static IServiceCollection AddMappers(this IServiceCollection services)
+    public static IServiceCollection AddMapping(this IServiceCollection services)
     {
         var mappers = typeof(Module).Assembly.GetTypes()
-            .Where(t => typeof(IMapper).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
-            .Select(t => new { InterfaceType = t.GetInterfaces().First(), ImplementationType = t });
+            .Select(t => new { Type = t, Interface = t.GetInterfaces().FirstOrDefault() })
+            .Where(t => t.Interface is not null && t.Interface.GetCustomAttribute<MapperAttribute>() is not null);
 
         foreach (var mapper in mappers)
         {
-            services.AddScoped(mapper.InterfaceType, mapper.ImplementationType);
+            services.AddScoped(mapper.Interface!, mapper.Type);
         }
 
         return services;
