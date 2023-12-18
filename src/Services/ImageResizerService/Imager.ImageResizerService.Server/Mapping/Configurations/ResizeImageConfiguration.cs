@@ -1,4 +1,4 @@
-using Imager.ImageResizerService.Contracts.Events;
+using Imager.Dapr.Events;
 using Imager.ImageResizerService.Core.Images.Commands.ResizeImage;
 
 using Mapster;
@@ -10,6 +10,7 @@ public class ResizeImageConfiguration : IRegister
     public void Register(TypeAdapterConfig config)
     {
         config.RequireDestinationMemberSource = true;
-        config.NewConfig<ResizeImageEvent, ResizeImageCommand>();
+        config.NewConfig<OnResizeImageEvent, ResizeImageCommand>();
+        config.NewConfig<ResizeImageCommand, OnResizeImageEvent>();
     }
 }

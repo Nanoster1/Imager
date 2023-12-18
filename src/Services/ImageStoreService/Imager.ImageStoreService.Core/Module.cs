@@ -29,7 +29,7 @@ public static class Module
 
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
-        services.AddScoped<ITempImageObjectRepository, TempImageObjectRepository>();
+        services.AddHttpClient<ITempImageObjectRepository, TempImageObjectRepository>();
         return services;
     }
 

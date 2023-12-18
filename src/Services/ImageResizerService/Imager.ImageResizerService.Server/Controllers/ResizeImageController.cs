@@ -1,9 +1,10 @@
 using Dapr;
+using Dapr.Client;
 
 using Dumpify;
 
 using Imager.Dapr;
-using Imager.ImageResizerService.Contracts.Events;
+using Imager.Dapr.Events;
 
 using Imager.ImageResizerService.Contracts.Routes;
 using Imager.ImageResizerService.Server.Controllers.Common;
@@ -16,20 +17,32 @@ using Microsoft.AspNetCore.Mvc;
 namespace Imager.ImageResizerService.Server.Controllers;
 
 [Route(HttpRoutes.ResizeImage)]
-public class ResizeImageController(ISender sender, IResizeImageMapper mapper) : ApiController
+public class ResizeImageController(ISender sender, IResizeImageMapper mapper, DaprClient daprClient) : ApiController
 {
     private readonly ISender _sender = sender;
     private readonly IResizeImageMapper _mapper = mapper;
+    private readonly DaprClient _daprClient = daprClient;
 
     [HttpPost]
-    [Topic(DaprComponentsNames.ImagerPubsub, nameof(ResizeImageEvent))]
-    public async Task ResizeImage(
-        ResizeImageEvent @event,
-        [FromServices] ILogger<ResizeImageController> logger,
-        CancellationToken cancellationToken)
+    [Topic(DaprComponentsNames.ImagerPubsub, nameof(OnResizeImageEvent))]
+    public async Task ResizeImage(OnResizeImageEvent @event, [FromServices] ILogger<ResizeImageController> logger, CancellationToken cancellationToken)
     {
         var command = _mapper.Map(@event);
         var result = await _sender.Send(command, cancellationToken);
-        logger.LogInformation("Image resized: {@Result}", result.DumpText());
+        if (result.IsError)
+        {
+            logger.LogInformation(result.DumpText());
+            return;
+        }
+        else
+        {
+            var onImageResizedEvent = _mapper.Map(result.Value);
+            logger.LogInformation(onImageResizedEvent.DumpText());
+            await _daprClient.PublishEventAsync(
+                DaprComponentsNames.ImagerPubsub,
+                nameof(OnImageResizedEvent),
+                onImageResizedEvent,
+                cancellationToken);
+        }
     }
 }

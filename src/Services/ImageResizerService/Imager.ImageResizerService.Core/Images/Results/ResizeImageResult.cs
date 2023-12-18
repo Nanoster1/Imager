@@ -1,3 +1,3 @@
 namespace Imager.ImageResizerService.Core.Images.Results;
 
-public record ResizeImageResult(byte[] ResizedImageInBytes);
+public record ResizeImageResult(string UserId, string ResizedImageId);

@@ -31,8 +31,11 @@ public class ResizeImageCommandHandler(ITempImageService tempImageService) : IRe
         if (resizedBitmap == null) return Error.Failure("Failed to resize image");
         using SKImage resizedImage = SKImage.FromBitmap(resizedBitmap);
         using SKData encodedData = resizedImage.Encode(imageFormat, 100);
+        var resizedImageInBytes = encodedData.ToArray();
 
-        var result = new ResizeImageResult(encodedData.ToArray());
-        return result;
+        var createTempImagesRequest = new CreateTempImagesRequest(request.UserId, [resizedImageInBytes]);
+        var createTempImagesResponse = await _tempImageService.CreateImageAsync(createTempImagesRequest, cancellationToken);
+
+        return new ResizeImageResult(request.UserId, createTempImagesResponse.ImagesIds[0]);
     }
 }
