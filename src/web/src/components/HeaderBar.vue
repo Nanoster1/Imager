@@ -34,8 +34,12 @@ export default {
     async handler() {
       if (!this.status.isAuthorized) {
         this.user = await this.$gAuth.signIn();
+        window.localStorage.setItem("user", JSON.stringify(this.user));
+        window.localStorage.setItem("accessToken", this.user.Sc.access_token);
       } else {
         this.user = await this.$gAuth.signOut();
+        window.localStorage.setItem("user", "");
+        window.localStorage.setItem("accessToken", "");
       }
     }
   }

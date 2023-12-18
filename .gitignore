@@ -478,3 +478,11 @@ $RECYCLE.BIN/
 
 # Docker
 build/docker/volumes
+
+src/web/.vite/
+
+src/web/.stylelintcache
+
+src/web/package-lock.json
+
+src/web/package.json

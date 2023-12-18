@@ -37,6 +37,7 @@
         class="button"
         size="x-large"
         variant="tonal"
+        @click="sendFetch"
       >
         Button
       </v-btn>
@@ -45,8 +46,19 @@
 </template>
 
 <script>
+// import { inject } from "vue";
+import { useSignalR } from "@quangdao/vue-signalr";
+
 export default {
   name: "ResizeForm",
+  setup() {
+    const signalr = useSignalR();
+
+    return {
+      signalr
+    };
+  },
+
   data() {
     return {
       fileName: "",
@@ -72,6 +84,15 @@ export default {
       reader.onload = () => {
         this.binaryFile = reader.result;
       };
+    },
+
+    sendFetch() {
+      const accessToken = window.localStorage.getItem("accessToken");
+      console.log(accessToken);
+      fetch("http://localhost:5000/resize", {
+        method: "POST",
+        authorization: `Bearer ${accessToken}`
+      });
     }
   }
 };
