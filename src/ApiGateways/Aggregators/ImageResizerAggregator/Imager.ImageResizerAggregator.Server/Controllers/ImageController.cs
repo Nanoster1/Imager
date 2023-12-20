@@ -9,17 +9,20 @@ using ImageServiceGetUserImagesRequest = Imager.ImageStoreService.Contracts.Http
 
 using Microsoft.AspNetCore.Mvc;
 using Imager.ImageResizerAggregator.Contracts.Models;
+using Imager.ImageResizerAggregator.Contracts.Requests;
+using System.ComponentModel.DataAnnotations;
 
 namespace Imager.ImageResizerAggregator.Server.Controllers;
 
 [Route(HttpRoutes.ImageController)]
-public class ImageController(IImageService imageService) : ApiController
+public class ImageController(IImageService imageService, IEmailService emailService) : ApiController
 {
     private readonly IImageService _imageService = imageService;
+    private readonly IEmailService _emailService = emailService;
 
-    [Route("{request}")]
+    [HttpGet]
     public async Task<ActionResult<GetImageResponse>> GetImage(
-        [FromRoute] GetImageRequest request,
+        [FromQuery] GetImageRequest request,
         CancellationToken cancellationToken)
     {
         var user = GetUser();
@@ -30,13 +33,25 @@ public class ImageController(IImageService imageService) : ApiController
         return Ok(response);
     }
 
-    [Route("all")]
-    public async Task<ActionResult<GetImageResponse>> GetAllImages(CancellationToken cancellationToken)
+    [HttpGet("all")]
+    public async Task<ActionResult<GetImageResponse>> GetUserImages(CancellationToken cancellationToken)
     {
         var user = GetUser();
         var getUserImagesRequest = new ImageServiceGetUserImagesRequest(user.Id);
         var getUserImagesResponse = await _imageService.GetUserImagesAsync(getUserImagesRequest, cancellationToken);
         var response = new GetUserImagesResponse(getUserImagesResponse.Images.Select(x => new ImageModel(x.ImageInBytes, x.Format)));
         return Ok(response);
+    }
+
+    [HttpPost("email")]
+    public async Task<ActionResult> SendImageToEmail(
+        [FromBody] SendImageToEmailRequest request,
+        CancellationToken cancellationToken)
+    {
+        var user = GetUser();
+        var getImageRequest = new ImageServiceGetImageRequest(user.Id, request.ImageId);
+        var getImageResponse = await _imageService.GetImageAsync(getImageRequest, cancellationToken);
+        await _emailService.SendOrderConfirmationAsync(getImageResponse.Image.ImageInBytes, getImageResponse.Image.Format, request.UserEmail);
+        return NoContent();
     }
 }
