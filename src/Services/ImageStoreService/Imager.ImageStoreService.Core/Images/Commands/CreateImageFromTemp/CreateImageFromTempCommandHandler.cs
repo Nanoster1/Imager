@@ -1,5 +1,7 @@
 using ErrorOr;
 
+using Imager.Dapr.S3.Models;
+
 using Imager.ImageStoreService.Core.Common.Services.Interfaces;
 using Imager.ImageStoreService.Core.Images.Models;
 
@@ -21,18 +23,18 @@ public class CreateImageFromTempCommandHandler(
 
     public async Task<ErrorOr<CreateImageFromTempResult>> Handle(CreateImageFromTempCommand request, CancellationToken cancellationToken)
     {
-        var tempImage = await _tempImageObjectStore.GetObjectAsync(new(request.UserId, request.TempImageId), cancellationToken);
+        var key = new ObjectStoreKey(request.UserId, request.TempImageId);
+        var tempImage = await _tempImageObjectStore.GetObjectAsync(key, cancellationToken);
         if (tempImage is null) return Error.NotFound("Temp image not found");
-        var newKey = await _objectStoreKeyGenerator.GenerateAsync(request.UserId, cancellationToken);
         var image = new ImageObject(tempImage.Value.Image, tempImage.Value.Format);
         try
         {
-            await _imageObjectStore.CreateObjectAsync(newKey, image, cancellationToken: cancellationToken);
+            await _imageObjectStore.CreateObjectAsync(key, image, cancellationToken: cancellationToken);
         }
         catch (Exception)
         {
             return Error.Failure("Failed to create image");
         }
-        return new CreateImageFromTempResult(request.UserId, newKey.Value);
+        return new CreateImageFromTempResult(request.UserId, key.Value);
     }
 }
