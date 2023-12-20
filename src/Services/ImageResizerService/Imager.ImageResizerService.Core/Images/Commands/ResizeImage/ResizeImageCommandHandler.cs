@@ -1,3 +1,5 @@
+using Dumpify;
+
 using ErrorOr;
 
 using Imager.ImageResizerService.Core.Common.Services.Interfaces;
@@ -8,34 +10,28 @@ using Imager.ImageStoreService.Contracts.Models;
 
 using MediatR;
 
+using Microsoft.Extensions.Logging;
+
 using SkiaSharp;
 
 namespace Imager.ImageResizerService.Core.Images.Commands.ResizeImage;
 
-public class ResizeImageCommandHandler(ITempImageService tempImageService) : IRequestHandler<ResizeImageCommand, ErrorOr<ResizeImageResult>>
+public class ResizeImageCommandHandler(ITempImageService tempImageService, ILogger<ResizeImageCommandHandler> logger) : IRequestHandler<ResizeImageCommand, ErrorOr<ResizeImageResult>>
 {
     private readonly ITempImageService _tempImageService = tempImageService;
+    private readonly ILogger<ResizeImageCommandHandler> _logger = logger;
 
     public async Task<ErrorOr<ResizeImageResult>> Handle(ResizeImageCommand request, CancellationToken cancellationToken)
     {
         var getTempImageRequest = new GetTempImageRequest(request.ImageId, request.UserId);
         var getTempImageResponse = await _tempImageService.GetImageAsync(getTempImageRequest, cancellationToken);
 
-        var format = getTempImageResponse.Image.Format;
-        if (!Enum.TryParse<SKEncodedImageFormat>(format, true, out var imageFormat))
-        {
-            return Error.Failure($"Invalid image format: {format ?? "null"}");
-        }
-
         using var sourceBitmap = SKBitmap.Decode(getTempImageResponse.Image.ImageInBytes);
-        var resizedInfo = new SKImageInfo(request.Width, request.Height);
-        using SKBitmap resizedBitmap = sourceBitmap.Resize(resizedInfo, SKFilterQuality.High);
-        if (resizedBitmap == null) return Error.Failure("Failed to resize image");
-        using SKImage resizedImage = SKImage.FromBitmap(resizedBitmap);
-        using SKData encodedData = resizedImage.Encode(imageFormat, 100);
-        var resizedImageInBytes = encodedData.ToArray();
+        using var scaledBitmap = sourceBitmap.Resize(new SKImageInfo(request.Width, request.Height), SKFilterQuality.High);
+        using var scaledImage = SKImage.FromBitmap(scaledBitmap);
+        using var data = scaledImage.Encode();
 
-        var tempImageFileModel = new TempImageFileModel(resizedImageInBytes, format);
+        var tempImageFileModel = new TempImageFileModel(data.ToArray(), getTempImageResponse.Image.Format);
         var createTempImagesRequest = new CreateTempImagesRequest(request.UserId, [tempImageFileModel]);
         var createTempImagesResponse = await _tempImageService.CreateImageAsync(createTempImagesRequest, cancellationToken);
 
