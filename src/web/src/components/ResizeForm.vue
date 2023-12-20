@@ -1,7 +1,8 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
-  <div class="d-flex flex-column gap-5 justify-content-center">
-    <div>
-      <div class="wrapper d-flex align-items-center">
+  <div class="d-flex gap-9 justify-content-center">
+    <div class="d-flex gap-5">
+      <div class="wrapper d-flex align-items-center justify-content-center">
         <input
           class="loader"
           type="file"
@@ -10,7 +11,7 @@
           @input="fileToBinary"
         />
         <span
-          class="headline-lg"
+          class="headline-sm"
           v-html="headline"
         >
         </span>
@@ -35,19 +36,24 @@
           class="button"
           size="x-large"
           variant="tonal"
-          @click="sendFetch"
+          :disabled="!(width && height && fileNames.length)"
+          @click="resize"
         >
           Изменить размер
         </v-btn>
       </div>
     </div>
 
-    <div v-if="!!files">
-      <h3 class="headline-sm">Список загруженных файлов</h3>
+    <div
+      v-if="!!fileNames?.length"
+      class="d-flex flex-column gap-5"
+    >
+      <h3 class="headline-md">Список загруженных файлов</h3>
       <span
-        v-for="file in files"
+        v-for="file in fileNames"
         :key="file"
-        >{{ file }}
+      >
+        {{ file }}
       </span>
     </div>
   </div>
@@ -62,6 +68,20 @@ export default {
   setup() {
     const signalr = useSignalR();
 
+    signalr.on("SendResizedImageInfo", (id) => {
+      const response = fetch(`http://localhost:5000/resize/${id}`, {
+        method: "GET",
+        Authorization: `Bearer ${this.accessToken}`
+      });
+      const imageRes = response.json().then((data) => {
+        return {
+          name: data.imageId,
+          image: atob(data.image.imageInBytes)
+        };
+      });
+      this.gettingImages.push(imageRes);
+    });
+
     return {
       signalr
     };
@@ -69,40 +89,72 @@ export default {
 
   data() {
     return {
-      files: [],
-      binaryFiles: null,
+      fileNames: [],
+      binaryFiles: [],
       width: 0,
-      height: 0
+      height: 0,
+      imageIds: [],
+      accessToken: "",
+      gettingImages: []
     };
   },
 
   computed: {
     headline() {
-      return !this.fileName
+      return !this.fileNames.length
         ? "Нажмите, чтобы загрузить изображение"
         : `Файл(ы) успешно загружен(ы). <br/> <br/> Нажмите еще раз, если хотите загрузить другой файл`;
     }
   },
 
   methods: {
-    fileToBinary(event) {
-      const reader = new FileReader();
-      reader.readAsDataURL(event.target.files);
-      this.files = event.target.files.name;
-      reader.onload = () => {
-        this.binaryFiles = reader.result;
-      };
+    async fileToBinary(event) {
+      for (const file of event.target.files) {
+        const result = await this.readFile(file);
+
+        this.fileNames.push(file.name);
+        this.binaryFiles.push({
+          imageInBytes: btoa(result),
+          format: file.type.split("/")[1]
+        });
+      }
     },
 
-    sendFetch() {
-      const accessToken = window.localStorage.getItem("accessToken");
-      console.log(accessToken);
-      fetch("http://localhost:5000/resize", {
+    readFile(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          resolve(reader.result);
+        };
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(file);
+      });
+    },
+
+    async resize() {
+      this.accessToken = window.localStorage.getItem("accessToken");
+      const response = await fetch("http://localhost:5000/resize", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
+          Authorization: `Bearer ${this.accessToken}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          width: this.width,
+          height: this.height,
+          imageModels: this.binaryFiles
+        })
       });
+      this.imageIds = await response.json().then((data) => data.imageIds);
+    },
+
+    convertBytesObjectInArray(obj) {
+      const result = [];
+      for (const value of obj) {
+        result.push(+value);
+      }
+      console.log(result);
+      return result;
     }
   }
 };
@@ -141,6 +193,10 @@ export default {
 .button {
   color: white;
   background-color: $secondary-brand-60;
+
+  &:disabled {
+    background-color: $secondary-content-64;
+  }
 }
 
 .controls {

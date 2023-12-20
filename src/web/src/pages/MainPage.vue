@@ -1,19 +1,16 @@
 <template>
-  <div>
-    <header-bar />
-    <page-body class="body" />
+  <div class="body d-flex flex-column gap-9 align-items-center">
+    <resize-form class="w-100" />
   </div>
 </template>
 
 <script>
-import HeaderBar from "../components/HeaderBar.vue";
-import PageBody from "../components/PageBody.vue";
+import ResizeForm from "../components/ResizeForm.vue";
 
 export default {
   name: "MainPage",
   components: {
-    HeaderBar,
-    PageBody
+    ResizeForm
   }
 };
 </script>

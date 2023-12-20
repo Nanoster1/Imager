@@ -21,6 +21,7 @@ app.use(gAuth, {
   clientId,
   plugin_name: "resizer"
 });
+
 app.use(vuetify);
 app.use(VueSignalR, {
   url: "http://localhost:5000/resize-hub",
