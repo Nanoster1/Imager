@@ -11,8 +11,8 @@ namespace Imager.ImageStoreService.Server.Mapping.Mappers.Interfaces;
 [Mapper]
 public interface ITempImageMapper
 {
-    public CreateTempImagesCommand Map(CreateTempImagesRequest request);
-    public CreateTempImagesResponse Map(CreateTempImagesResult result);
-    public GetTempImageQuery Map(GetTempImageRequest result);
-    public GetTempImageResponse Map(GetTempImageResult result);
+    CreateTempImagesCommand Map(CreateTempImagesRequest request);
+    CreateTempImagesResponse Map(CreateTempImagesResult result);
+    GetTempImageQuery Map(GetTempImageRequest result);
+    GetTempImageResponse Map(GetTempImageResult result);
 }

@@ -1,8 +1,8 @@
 namespace Imager.Dapr.S3.Responses;
 
-public record ListObjectsResponse(
+public record ListObjectsResponse<TObject>(
     string CommonPrefixes,
-    List<object> Contents,
+    List<TObject> Contents,
     string Delimiter,
     string EncodingType,
     bool IsTruncated,

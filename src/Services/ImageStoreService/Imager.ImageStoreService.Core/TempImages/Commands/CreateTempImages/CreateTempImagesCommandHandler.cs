@@ -1,7 +1,6 @@
 using ErrorOr;
 
 
-using Imager.ImageStoreService.Core.Common.Repositories.Interfaces;
 using Imager.ImageStoreService.Core.Common.Services.Interfaces;
 using Imager.ImageStoreService.Core.TempImages.Models;
 using Imager.ImageStoreService.Core.TempImages.Results;
@@ -16,12 +15,12 @@ using Throw;
 namespace Imager.ImageStoreService.Core.TempImages.Commands.CreateTempImages;
 
 public class CreateTempImagesCommandHandler(
-    ITempImageObjectRepository tempImageObjectRepository,
+    ITempImageObjectStore tempImageObjectRepository,
     ITempImageObjectKeyGenerator imageObjectKeyGenerator,
     IOptions<TempImagesSettings> tempImagesSettings) :
     IRequestHandler<CreateTempImagesCommand, ErrorOr<CreateTempImagesResult>>
 {
-    private readonly ITempImageObjectRepository _tempImageObjectRepository = tempImageObjectRepository;
+    private readonly ITempImageObjectStore _tempImageObjectRepository = tempImageObjectRepository;
     private readonly ITempImageObjectKeyGenerator _imageObjectKeyGenerator = imageObjectKeyGenerator;
     private readonly TempImagesSettings _tempImagesSettings = tempImagesSettings.Value;
 
@@ -29,13 +28,14 @@ public class CreateTempImagesCommandHandler(
     {
         request.ThrowIfNull();
 
-        var ids = new List<string>(request.Images.Count);
-        foreach (var image in request.Images)
+        var ids = new string[request.Images.Count];
+        for (var i = 0; i < request.Images.Count; i++)
         {
+            var image = request.Images[i];
             var key = await _imageObjectKeyGenerator.GenerateAsync(request.UserId, cancellationToken);
-            var tempImageObject = new TempImageObject(image);
+            var tempImageObject = new TempImageObject(image.ImageInBytes, image.Format);
             await _tempImageObjectRepository.CreateObjectAsync(key, tempImageObject, _tempImagesSettings.PresignTTL, cancellationToken);
-            ids.Add(key.Value);
+            ids[i] = key.Value;
         }
 
         return new CreateTempImagesResult(ids);

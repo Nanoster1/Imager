@@ -11,6 +11,5 @@ public record ResizeImageCommand(
     string ImageId,
     string UserId,
     int Width,
-    int Height,
-    string ImageFormat) :
+    int Height) :
     IRequest<ErrorOr<ResizeImageResult>>;

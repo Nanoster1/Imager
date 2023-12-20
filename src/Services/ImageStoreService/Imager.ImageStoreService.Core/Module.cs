@@ -1,5 +1,3 @@
-using Imager.ImageStoreService.Core.Common.Repositories.Implementations;
-using Imager.ImageStoreService.Core.Common.Repositories.Interfaces;
 using Imager.ImageStoreService.Core.Common.Services.Implementations;
 using Imager.ImageStoreService.Core.Common.Services.Interfaces;
 using Imager.ImageStoreService.Core.Common.Settings;
@@ -17,7 +15,6 @@ public static class Module
         services.AddMediatR();
         services.AddSettings(configuration);
         services.AddServices();
-        services.AddRepositories();
         return services;
     }
 
@@ -27,14 +24,10 @@ public static class Module
         return services;
     }
 
-    private static IServiceCollection AddRepositories(this IServiceCollection services)
-    {
-        services.AddHttpClient<ITempImageObjectRepository, TempImageObjectRepository>();
-        return services;
-    }
-
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
+        services.AddHttpClient<ITempImageObjectStore, TempImageObjectStore>();
+        services.AddHttpClient<IImageObjectStore, ImageObjectStore>();
         services.AddScoped<ITempImageObjectKeyGenerator, TempImageObjectKeyGenerator>();
         return services;
     }

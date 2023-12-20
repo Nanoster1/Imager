@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Imager.ImageResizerService.Server.Controllers;
 
-[Route(HttpRoutes.ResizeImage)]
+[Route(HttpRoutes.ResizeImageController)]
 public class ResizeImageController(ISender sender, IResizeImageMapper mapper, DaprClient daprClient) : ApiController
 {
     private readonly ISender _sender = sender;

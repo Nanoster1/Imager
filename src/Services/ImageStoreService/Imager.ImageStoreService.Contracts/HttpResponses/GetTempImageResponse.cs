@@ -1,3 +1,5 @@
+using Imager.ImageStoreService.Contracts.Models;
+
 namespace Imager.ImageStoreService.Contracts.HttpResponses;
 
-public record GetTempImageResponse(string ImageId, byte[] Image);
+public record GetTempImageResponse(string ImageId, TempImageFileModel Image);
