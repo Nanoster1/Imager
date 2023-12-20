@@ -1,3 +1,7 @@
+using Dapr.Client;
+
+using Imager.Dapr.Events;
+
 using Imager.ImageResizerAggregator.Contracts.Routes;
 using Imager.ImageResizerAggregator.Server.Controllers.Common;
 using Imager.ImageResizerAggregator.Server.Services.Interfaces;

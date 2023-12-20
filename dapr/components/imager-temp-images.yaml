@@ -2,6 +2,7 @@ apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
   name: imager-temp-images
+  namespace: imager
 spec:
   type: bindings.aws.s3
   version: v1

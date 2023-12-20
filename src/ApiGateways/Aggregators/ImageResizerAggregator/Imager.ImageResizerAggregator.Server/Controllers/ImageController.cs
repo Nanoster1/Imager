@@ -10,7 +10,6 @@ using ImageServiceGetUserImagesRequest = Imager.ImageStoreService.Contracts.Http
 using Microsoft.AspNetCore.Mvc;
 using Imager.ImageResizerAggregator.Contracts.Models;
 using Imager.ImageResizerAggregator.Contracts.Requests;
-using System.ComponentModel.DataAnnotations;
 
 namespace Imager.ImageResizerAggregator.Server.Controllers;
 
@@ -34,13 +33,13 @@ public class ImageController(IImageService imageService, IEmailService emailServ
     }
 
     [HttpGet("all")]
-    public async Task<ActionResult<GetImageResponse>> GetUserImages(CancellationToken cancellationToken)
+    public Task<ActionResult<GetImageResponse>> GetUserImages(CancellationToken cancellationToken)
     {
-        var user = GetUser();
-        var getUserImagesRequest = new ImageServiceGetUserImagesRequest(user.Id);
-        var getUserImagesResponse = await _imageService.GetUserImagesAsync(getUserImagesRequest, cancellationToken);
-        var response = new GetUserImagesResponse(getUserImagesResponse.Images.Select(x => new ImageModel(x.ImageInBytes, x.Format)));
-        return Ok(response);
+        // var user = GetUser();
+        // var getUserImagesRequest = new ImageServiceGetUserImagesRequest(user.Id);
+        // var getUserImagesResponse = await _imageService.GetUserImagesAsync(getUserImagesRequest, cancellationToken);
+        // var response = new GetUserImagesResponse(getUserImagesResponse.Images.Select(x => new ImageModel(x.ImageInBytes, x.Format)));
+        return Task.FromResult((ActionResult<GetImageResponse>)Ok());
     }
 
     [HttpPost("email")]
