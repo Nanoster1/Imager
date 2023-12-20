@@ -40,6 +40,7 @@ static_resources:
                             auto_host_rewrite: true
                             prefix_rewrite: "/v1.0/invoke/image-resizer-agg/method/"
                             cluster: dapr
+                            timeout: 300s
                 http_filters:
                   - name: envoy.filters.http.buffer
                     typed_config:
