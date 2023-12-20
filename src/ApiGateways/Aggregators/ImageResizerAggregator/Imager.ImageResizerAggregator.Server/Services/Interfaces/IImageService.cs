@@ -14,4 +14,6 @@ public interface IImageService
 
     [Post(ImageStoreRoutes.ImageController)]
     Task<CreateImageFromTempResponse> CreateImageFromTempAsync([Body] CreateImageFromTempRequest request, CancellationToken cancellationToken);
+    [Get($"{ImageStoreRoutes.ImageController}/all")]
+    Task<GetUserImagesResponse> GetUserImagesAsync([Query] GetUserImagesRequest request, CancellationToken cancellationToken);
 }
