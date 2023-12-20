@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@aspnet/signalr": "^1.0.27",
+    "@latelier/vue-signalr": "^2.0.4",
     "@quangdao/vue-signalr": "^1.0.1",
     "maska": "^2.1.10",
     "vue": "^3.2.47",
