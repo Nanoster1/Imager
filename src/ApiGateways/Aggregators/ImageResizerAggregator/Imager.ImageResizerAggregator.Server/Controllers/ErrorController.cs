@@ -17,13 +17,4 @@ public class ErrorController : ApiController
     {
         return Problem();
     }
-
-    [HttpPost("test-email/{email}")]
-    public async Task<ActionResult> TestEmail(IFormFile file, string email, [FromServices] IEmailService emailService)
-    {
-        using var ms = new MemoryStream();
-        file.CopyTo(ms);
-        await emailService.SendOrderConfirmationAsync(ms.ToArray(), Path.GetFileName(file.FileName).Trim('.'), email);
-        return Ok();
-    }
 }
