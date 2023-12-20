@@ -23,7 +23,7 @@ public interface IObjectStore<TObject> where TObject : notnull
     Task DeleteObjectAsync(
         ObjectStoreKey key,
         CancellationToken cancellationToken = default);
-    Task<ListObjectsResponse> ListObjectsAsync(
+    Task<ListObjectsResponse<TObject>> ListObjectsAsync(
         int maxResults = 1000,
         string? prefix = null,
         string? delimiter = null,

@@ -39,4 +39,16 @@ public class ImageController(ISender sender, IImageMapper imageMapper) : ApiCont
             ? BadRequest(result.Errors)
             : Ok(_mapper.Map(result.Value));
     }
+
+    [HttpGet("all")]
+    public async Task<ActionResult<GetUserImagesResponse>> GetUserImages(
+        GetUserImagesRequest request,
+        CancellationToken cancellationToken)
+    {
+        var query = _mapper.Map(request);
+        var result = await _sender.Send(query, cancellationToken);
+        return result.IsError
+            ? BadRequest(result.Errors)
+            : Ok(_mapper.Map(result.Value));
+    }
 }

@@ -20,7 +20,7 @@ namespace Imager.ImageStoreService.Server.Mapping
         }
         public CreateTempImagesResponse Map(CreateTempImagesResult p5)
         {
-            return p5 == null ? null : new CreateTempImagesResponse(funcMain4(p5.ImagesIds));
+            return p5 == null ? null : new CreateTempImagesResponse(funcMain4(p5.ImageIds));
         }
         public GetTempImageQuery Map(GetTempImageRequest p7)
         {
@@ -52,23 +52,14 @@ namespace Imager.ImageStoreService.Server.Mapping
             
         }
         
-        private List<string> funcMain4(List<string> p6)
+        private string[] funcMain4(string[] p6)
         {
             if (p6 == null)
             {
                 return null;
             }
-            List<string> result = new List<string>(p6.Count);
-            
-            int i = 0;
-            int len = p6.Count;
-            
-            while (i < len)
-            {
-                string item = p6[i];
-                result.Add(item);
-                i++;
-            }
+            string[] result = new string[p6.Length];
+            Array.Copy(p6, 0, result, 0, p6.Length);
             return result;
             
         }

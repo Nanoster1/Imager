@@ -104,7 +104,7 @@ public class DaprObjectStore<TObject> : IObjectStore<TObject>
     }
 
 
-    public virtual async Task<ListObjectsResponse> ListObjectsAsync(
+    public virtual async Task<ListObjectsResponse<TObject>> ListObjectsAsync(
         int maxResults = 1000,
         string? prefix = null,
         string? delimiter = null,
@@ -119,7 +119,7 @@ public class DaprObjectStore<TObject> : IObjectStore<TObject>
         var response = await _client.PostAsJsonAsync(_daprUri, body, cancellationToken).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
 
-        var result = await response.Content.ReadFromJsonAsync<ListObjectsResponse>(cancellationToken).ConfigureAwait(false);
+        var result = await response.Content.ReadFromJsonAsync<ListObjectsResponse<TObject>>(cancellationToken).ConfigureAwait(false);
         return result.ThrowIfNull();
     }
 

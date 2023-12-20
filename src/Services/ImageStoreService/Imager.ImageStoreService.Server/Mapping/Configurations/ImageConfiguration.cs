@@ -2,6 +2,7 @@ using Imager.ImageStoreService.Contracts.HttpRequests;
 using Imager.ImageStoreService.Contracts.HttpResponses;
 using Imager.ImageStoreService.Core.Images.Commands.CreateImageFromTemp;
 using Imager.ImageStoreService.Core.Images.Queries.GetImage;
+using Imager.ImageStoreService.Core.Images.Queries.GetUserImages;
 using Imager.ImageStoreService.Core.Images.Results;
 
 using Mapster;
@@ -17,5 +18,7 @@ public class ImageConfiguration : IRegister
         config.NewConfig<CreateImageFromTempResult, CreateImageFromTempResponse>();
         config.NewConfig<GetImageRequest, GetImageQuery>();
         config.NewConfig<GetImageResult, GetImageResponse>();
+        config.NewConfig<GetUserImagesRequest, GetUserImagesQuery>();
+        config.NewConfig<GetUserImagesResult, GetUserImagesResponse>();
     }
 }

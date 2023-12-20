@@ -1,5 +1,7 @@
 using Dapr.Client;
 
+using Imager.ImageResizerAggregator.Server.Services.Implementations;
+
 using Imager.ImageResizerAggregator.Server.Services.Interfaces;
 
 using Refit;
@@ -16,6 +18,7 @@ public static class Module
     public static IServiceCollection AddServerServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddRefit(configuration);
+        services.AddScoped<IEmailService, EmailService>();
         return services;
     }
 

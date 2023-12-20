@@ -2,6 +2,7 @@ using Imager.ImageResizerAggregator.Contracts.Routes;
 using Imager.ImageResizerAggregator.Server.Authentication;
 using Imager.ImageResizerAggregator.Server.Configuration;
 using Imager.ImageResizerAggregator.Server.Logging;
+using Imager.ImageResizerAggregator.Server.Services;
 using Imager.ImageResizerAggregator.Server.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,7 @@ var logging = builder.Logging;
 var services = builder.Services;
 {
     services.AddServerSettings(configuration);
+    services.AddServerServices(configuration);
     services.AddServerSignalR();
     services.AddServerAuthentication();
     services.AddControllers().AddDapr();
