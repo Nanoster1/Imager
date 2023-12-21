@@ -14,7 +14,10 @@
   "dependencies": {
     "@aspnet/signalr": "^1.0.27",
     "@latelier/vue-signalr": "^2.0.4",
+    "@microsoft/signalr": "^8.0.0",
     "@quangdao/vue-signalr": "^1.0.1",
+    "Babel": "^0.0.1",
+    "babel-runtime": "^6.26.0",
     "maska": "^2.1.10",
     "vue": "^3.2.47",
     "vue3-google-oauth2": "^1.0.7",
