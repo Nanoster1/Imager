@@ -40,6 +40,12 @@ static_resources:
                             auto_host_rewrite: true
                             prefix_rewrite: "/v1.0/invoke/image-resizer-agg/method/"
                             cluster: dapr
+                        - name: image-resizer-agg-hub
+                          match:
+                            prefix: "/hub"
+                          route:
+                            auto_host_rewrite: true
+                            cluster: image-resizer-agg
                             timeout: 300s
                 http_filters:
                   - name: envoy.filters.http.buffer
@@ -66,3 +72,16 @@ static_resources:
                     socket_address:
                       address: 127.0.0.1
                       port_value: 3500
+    - name: image-resizer-agg
+      connect_timeout: 0.25s
+      type: strict_dns
+      lb_policy: round_robin
+      load_assignment:
+        cluster_name: image-resizer-agg
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: image-resizer-agg
+                      port_value: 80
