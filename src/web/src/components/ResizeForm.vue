@@ -61,6 +61,7 @@
 
 <script>
 // import { inject } from "vue";
+import * as signalR from "@microsoft/signalr";
 
 export default {
   name: "ResizeForm",
@@ -88,15 +89,41 @@ export default {
     }
   },
 
+  mounted() {
+    const connection = new signalR.HubConnectionBuilder()
+      .withUrl("http://localhost:5000/hub/resize", {
+        accessTokenFactory: () => this.accessToken,
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets
+      })
+      .build();
+
+    connection.start();
+
+    connection.on("SendResizedImageInfo", (id) => {
+      const response = fetch(`http://localhost:5000/images?ImageId=${id}`, {
+        method: "GET"
+      });
+      this.gettingImages = response.json().then((data) => {
+        return {
+          id: data.imageId,
+          image: {
+            imageInBytes: data.image.imageInBytes,
+            format: data.image.format
+          }
+        };
+      });
+    });
+  },
+
   methods: {
     async fileToBinary(event) {
       for (const file of event.target.files) {
         const result = await this.readFile(file);
-
         this.fileNames.push(file.name);
         this.binaryFiles.push({
-          imageInBytes: btoa(result),
-          format: file.type.split("/")[1]
+          ImageInBytes: btoa(new Uint8Array(result)),
+          Format: file.type.split("/")[1]
         });
       }
     },
@@ -121,9 +148,9 @@ export default {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          width: this.width,
-          height: this.height,
-          imageModels: this.binaryFiles
+          Width: this.width,
+          Height: this.height,
+          ImageModels: this.binaryFiles
         })
       });
       this.imageIds = await response.json().then((data) => data.imageIds);

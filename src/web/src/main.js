@@ -1,7 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import gAuth from "vue3-google-oauth2";
-import * as signalR from "@microsoft/signalr";
 
 // Vuetify
 import "vuetify/styles";
@@ -21,28 +20,6 @@ app.use(gAuth, {
   clientId,
   plugin_name: "resizer"
 });
-
-const connection = new signalR.HubConnectionBuilder()
-  .withUrl("http://localhost:5000/hub/resize", {
-    accessTokenFactory: () => "",
-    skipNegotiation: true,
-    transport: signalR.HttpTransportType.WebSockets
-  })
-  .build();
-
-console.log(connection);
-
-// connection.on("send", (data) => {
-// console.log(data);
-// });
-
-const start = () => {
-  connection.start();
-};
-
-start();
-
-console.log(connection);
 
 app.use(vuetify);
 
