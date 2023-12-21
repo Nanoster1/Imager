@@ -23,7 +23,8 @@ app.use(gAuth, {
 });
 
 const connection = new signalR.HubConnectionBuilder()
-  .withUrl("http://localhost:5000/resize-hub", {
+  .withUrl("http://localhost:5000/hub/resize", {
+    accessTokenFactory: () => "",
     skipNegotiation: true,
     transport: signalR.HttpTransportType.WebSockets
   })
@@ -31,9 +32,9 @@ const connection = new signalR.HubConnectionBuilder()
 
 console.log(connection);
 
-connection.on("send", (data) => {
-  console.log(data);
-});
+// connection.on("send", (data) => {
+// console.log(data);
+// });
 
 const start = () => {
   connection.start();
