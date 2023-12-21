@@ -1,4 +1,4 @@
-using Imager.ImageResizerAggregator.Server.Authentication.Constants;
+using System.IdentityModel.Tokens.Jwt;
 
 using Microsoft.AspNetCore.SignalR;
 
@@ -8,6 +8,6 @@ public class UserIdProvider : IUserIdProvider
 {
     public string? GetUserId(HubConnectionContext connection)
     {
-        return connection.User.Claims.FirstOrDefault(x => x.Type.Equals(UserClaimTypes.Id, StringComparison.Ordinal))?.Value;
+        return connection.User.Claims.FirstOrDefault(x => x.Type.Equals(JwtRegisteredClaimNames.Sub, StringComparison.Ordinal))?.Value;
     }
 }

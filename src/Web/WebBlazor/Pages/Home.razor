@@ -1,0 +1,178 @@
+﻿@using Imager.ImageResizerAggregator.Contracts.Requests
+@using Imager.ImageResizerAggregator.Contracts.Models
+@using System.Text
+@using Microsoft.AspNetCore.SignalR.Client
+
+@page "/"
+
+<PageTitle>Home</PageTitle>
+
+@inject ILogger<Home> Logger
+
+<h3>Upload Images</h3>
+
+<label>Width:</label>
+<InputNumber @bind-Value="@Width" />
+
+<label>Height:</label>
+<InputNumber @bind-Value="@Height" />
+
+<label>Email:</label>
+<InputText @bind-Value="@Email" />
+
+<p>
+    <label>
+        Upload up to @maxAllowedFiles of up to @maxFileSize bytes:
+        <InputFile OnChange="@LoadFiles" multiple />
+    </label>
+</p>
+
+<p>
+    <label>Resize:</label>
+    <Button @onclick="@OnResizeImages">Resize</Button>
+</p>
+
+<p class="error">@Error</p>
+@if (isLoading)
+{
+    <p>Uploading...</p>
+}
+else
+{
+    <ul>
+    @foreach (var file in loadedImages)
+        {
+            <li>
+                <ul>
+                    <li>Name: @file.Name</li>
+                    <li>Last modified: @file.LastModified.ToString()</li>
+                    <li>Size (bytes): @file.Size</li>
+                    <li>Content type: @file.ContentType</li>
+                </ul>
+            </li>
+        }
+    </ul>
+
+    <ul>
+    @foreach (var image in resizedImages)
+        {
+            <li>
+                <ul>
+                    <li>Id: @image.Key</li>
+                    <li><img src="data:image/@image.Value.Format;base64,@Convert.ToBase64String(image.Value.ImageInBytes)" />
+                    </li>
+                    <li><Button @onclick="() => DownloadImage(image.Key)">Download</Button></li>
+                    <li>
+                        <Button @onclick="() => SendToEmail(image.Key)">Send to Email</Button>
+                    </li>
+                </ul>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    [Inject]
+    private IResizeService ResizeService { get; set; } = null!;
+    [Inject]
+    private IImageService ImageService { get; set; } = null!;
+    [Inject]
+    private TokenService TokenService { get; set; } = null!;
+    [Inject]
+    private IJSRuntime JSRuntime { get; set; } = null!;
+
+    private List<IBrowserFile> loadedImages = new();
+    private Dictionary<string, ImageModel> resizedImages = new();
+    private long maxFileSize = 2000000;
+    private int maxAllowedFiles = 3;
+    private bool isLoading;
+    private int Width { get; set; } = 800;
+    private int Height { get; set; } = 600;
+    private string Email { get; set; } = string.Empty;
+    private string Error { get; set; } = string.Empty;
+    private HubConnection hubConnection = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder()
+        .WithUrl("http://localhost:5000/api/hub/resize", options =>
+        {
+            options.AccessTokenProvider = async () => await TokenService.GetTokenAsync();
+        })
+        .WithAutomaticReconnect()
+        .Build();
+
+        hubConnection.On<string>("SendResizedImageInfo", async (imageId) =>
+        {
+            var getImageRequest = new GetImageRequest(imageId);
+            var getImageResponse = await ImageService.GetImageAsync(getImageRequest);
+            resizedImages[imageId] = getImageResponse.Image;
+            await SendToEmail(imageId);
+            StateHasChanged();
+        });
+
+        await hubConnection.StartAsync();
+    }
+
+    private void LoadFiles(InputFileChangeEventArgs e)
+    {
+        isLoading = true;
+        loadedImages.Clear();
+
+        if (e.FileCount <= maxAllowedFiles)
+        {
+
+            foreach (var file in e.GetMultipleFiles(maxAllowedFiles))
+            {
+                try
+                {
+                    loadedImages.Add(file);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError("File: {FileName} Error: {Error}",
+                    file.Name, ex.Message);
+                }
+            }
+        }
+        else
+        {
+            Error = $"Max allowed files: {maxAllowedFiles}";
+        }
+
+        isLoading = false;
+    }
+
+    private async Task OnResizeImages()
+    {
+        resizedImages.Clear();
+        var imageModels = new ImageModel[loadedImages.Count];
+        for (var i = 0; i < loadedImages.Count; i++)
+        {
+            var image = loadedImages[i];
+            var bytes = new byte[image.Size];
+            await image.OpenReadStream(maxFileSize).ReadAsync(bytes);
+            imageModels[i] = new ImageModel(bytes, Path.GetExtension(image.Name).TrimStart('.'));
+        }
+        if (imageModels.Length <= 0) return;
+        var request = new StartResizeImagesRequest(Height, Width, imageModels);
+        var response = await ResizeService.StartResizeImagesResponse(request);
+    }
+
+    private async Task DownloadImage(string imageId)
+    {
+        var fileStream = new MemoryStream(resizedImages[imageId].ImageInBytes);
+        var fileName = $"{imageId}.{resizedImages[imageId].Format}";
+
+        using var streamRef = new DotNetStreamReference(stream: fileStream);
+
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+    }
+
+    private async Task SendToEmail(string imageId)
+    {
+        if (string.IsNullOrWhiteSpace(Email)) return;
+        var request = new SendImageToEmailRequest(imageId, Email);
+        await ImageService.SendImageToEmailAsync(request);
+    }
+}

@@ -1,5 +1,3 @@
-using Dumpify;
-
 using ErrorOr;
 
 using Imager.ImageResizerService.Core.Common.Services.Interfaces;

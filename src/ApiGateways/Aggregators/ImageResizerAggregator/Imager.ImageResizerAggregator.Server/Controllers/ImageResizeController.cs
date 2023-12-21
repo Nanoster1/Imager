@@ -1,6 +1,8 @@
 using Dapr;
 using Dapr.Client;
 
+using Dumpify;
+
 using Imager.Dapr;
 
 using Imager.Dapr.Events;
@@ -9,10 +11,11 @@ using Imager.ImageResizerAggregator.Contracts.Responses;
 using Imager.ImageResizerAggregator.Contracts.Routes;
 using Imager.ImageResizerAggregator.Server.Controllers.Common;
 using Imager.ImageResizerAggregator.Server.Services.Interfaces;
-using Imager.ImageResizerAggregator.Server.SignalR.Clients;
 using Imager.ImageResizerAggregator.Server.SignalR.Hubs;
 using Imager.ImageStoreService.Contracts.HttpRequests;
 using Imager.ImageStoreService.Contracts.Models;
+
+using Microsoft.AspNetCore.Authorization;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -31,13 +34,13 @@ public class ImageResizeController(
     private readonly DaprClient _daprClient = daprClient;
 
     [HttpPost]
-    public async Task<ActionResult> StartResizeImages(
+    public async Task<ActionResult<StartResizeImagesResponse>> StartResizeImages(
         [FromBody] StartResizeImagesRequest request,
         CancellationToken cancellationToken)
     {
         var user = GetUser();
         var tempImageFileModels = new List<TempImageFileModel>();
-        foreach (var image in request.ImageModels)
+        foreach (var image in request.Images)
         {
             tempImageFileModels.Add(new(image.ImageInBytes, image.Format));
         }
@@ -54,15 +57,18 @@ public class ImageResizeController(
         return Ok(response);
     }
 
-    [HttpPost($"/{nameof(OnImageResizedEvent)}")]
+    [HttpPost($"/event")]
+    [AllowAnonymous]
     [Topic(DaprComponentsNames.ImagerPubsub, nameof(OnImageResizedEvent))]
     public async Task OnImageResized(
         [FromBody] OnImageResizedEvent @event,
-        [FromServices] IHubContext<ResizeImageHub, IResizeImageClient> hub,
+        [FromServices] IHubContext<ResizeImageHub> hub,
+        [FromServices] ILogger<ImageResizeController> logger,
         CancellationToken cancellationToken)
     {
         var createImageRequest = new CreateImageFromTempRequest(@event.UserId, @event.ResizedImageId);
         var createImageResponse = await _imageService.CreateImageFromTempAsync(createImageRequest, cancellationToken);
-        await hub.Clients.User(createImageResponse.UserId).SendResizedImageInfo(createImageResponse.ImageId);
+        logger.LogInformation("{r}", hub.Clients.DumpText());
+        await hub.Clients.User(createImageResponse.UserId).SendAsync("SendResizedImageInfo", createImageResponse.ImageId);
     }
 }

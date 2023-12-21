@@ -28,6 +28,7 @@ public class ResizeImageController(ISender sender, IResizeImageMapper mapper, Da
     public async Task ResizeImage(OnResizeImageEvent @event, [FromServices] ILogger<ResizeImageController> logger, CancellationToken cancellationToken)
     {
         var command = _mapper.Map(@event);
+        logger.LogInformation(command.DumpText());
         var result = await _sender.Send(command, cancellationToken);
         if (result.IsError)
         {

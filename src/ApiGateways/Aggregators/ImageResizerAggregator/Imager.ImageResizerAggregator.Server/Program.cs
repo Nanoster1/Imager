@@ -24,6 +24,7 @@ var services = builder.Services;
     services.AddServerSignalR();
     services.AddServerAuthentication();
     services.AddControllers().AddDapr();
+    services.AddDaprClient();
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen();
 }

@@ -19,7 +19,7 @@ public static class Module
 
     public static IEndpointRouteBuilder MapHubs(this IEndpointRouteBuilder builder)
     {
-        builder.MapHub<ResizeImageHub>(HttpRoutes.ResizeImageHub);
+        builder.MapHub<ResizeImageHub>(HttpRoutes.ResizeImageHub, options => options.Transports = HttpTransportType.LongPolling);
         return builder;
     }
 }

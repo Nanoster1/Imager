@@ -3,13 +3,12 @@ using Imager.ImageResizerAggregator.Server.Controllers.Common;
 using Imager.ImageResizerAggregator.Server.Services.Interfaces;
 using GetImageRequest = Imager.ImageResizerAggregator.Contracts.Requests.GetImageRequest;
 using GetImageResponse = Imager.ImageResizerAggregator.Contracts.Responses.GetImageResponse;
-using GetUserImagesResponse = Imager.ImageResizerAggregator.Contracts.Responses.GetUserImagesResponse;
 using ImageServiceGetImageRequest = Imager.ImageStoreService.Contracts.HttpRequests.GetImageRequest;
-using ImageServiceGetUserImagesRequest = Imager.ImageStoreService.Contracts.HttpRequests.GetUserImagesRequest;
 
 using Microsoft.AspNetCore.Mvc;
-using Imager.ImageResizerAggregator.Contracts.Models;
 using Imager.ImageResizerAggregator.Contracts.Requests;
+using Imager.ImageResizerAggregator.Contracts.Responses;
+using Imager.ImageStoreService.Contracts.HttpRequests;
 
 namespace Imager.ImageResizerAggregator.Server.Controllers;
 
@@ -33,13 +32,13 @@ public class ImageController(IImageService imageService, IEmailService emailServ
     }
 
     [HttpGet("all")]
-    public Task<ActionResult<GetImageResponse>> GetUserImages(CancellationToken cancellationToken)
+    public async Task<ActionResult> GetUserImages(CancellationToken cancellationToken)
     {
-        // var user = GetUser();
-        // var getUserImagesRequest = new ImageServiceGetUserImagesRequest(user.Id);
-        // var getUserImagesResponse = await _imageService.GetUserImagesAsync(getUserImagesRequest, cancellationToken);
-        // var response = new GetUserImagesResponse(getUserImagesResponse.Images.Select(x => new ImageModel(x.ImageInBytes, x.Format)));
-        return Task.FromResult((ActionResult<GetImageResponse>)Ok());
+        var user = GetUser();
+        var getUserImagesRequest = new GetUserImagesRequest(user.Id);
+        var getUserImagesResponse = await _imageService.GetUserImagesAsync(getUserImagesRequest, cancellationToken);
+        var response = new GetUserImagesResponse(getUserImagesResponse.ImageIds);
+        return Ok(response);
     }
 
     [HttpPost("email")]

@@ -2,7 +2,7 @@ namespace Imager.Dapr.S3.Responses;
 
 public record ListObjectsResponse<TObject>(
     string CommonPrefixes,
-    List<TObject> Contents,
+    List<Contents<TObject>>? Contents,
     string Delimiter,
     string EncodingType,
     bool IsTruncated,
@@ -11,3 +11,12 @@ public record ListObjectsResponse<TObject>(
     string Name,
     string NextMarker,
     string Prefix);
+
+public record Contents<TObject>(
+    string ETag,
+    string Key,
+    string LastModified,
+    TObject Object,
+    int Size,
+    string StorageClass
+);

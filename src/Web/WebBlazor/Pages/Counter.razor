@@ -1,0 +1,67 @@
+﻿@page "/counter"
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Your images</h1>
+
+<label>Email:</label>
+<InputText @bind-Value="@Email" />
+
+<ul>
+    @foreach (var image in resizedImages)
+    {
+        <li>
+            <ul>
+                <li>Id: @image.Key</li>
+                <li><img src="data:image/@image.Value.Format;base64,@Convert.ToBase64String(image.Value.ImageInBytes)" />
+                </li>
+                <li><Button @onclick="() => DownloadImage(image.Key)">Download</Button></li>
+                <li>
+                    <Button @onclick="() => SendToEmail(image.Key)">Send to Email</Button>
+                </li>
+            </ul>
+        </li>
+    }
+</ul>
+
+@code {
+    [Inject]
+    private IImageService ImageService { get; set; } = null!;
+    [Inject]
+    private TokenService TokenService { get; set; } = null!;
+    [Inject]
+    private IJSRuntime JSRuntime { get; set; } = null!;
+
+    private List<IBrowserFile> loadedImages = new();
+    private Dictionary<string, Imager.ImageResizerAggregator.Contracts.Models.ImageModel> resizedImages = new();
+    private string Email { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await ImageService.GetUserImagesAsync();
+        foreach (var id in response.ImageIds)
+        {
+            var getImageRequest = new Imager.ImageResizerAggregator.Contracts.Requests.GetImageRequest(id);
+            var image = await ImageService.GetImageAsync(getImageRequest);
+            resizedImages.Add(id, new(image.Image.ImageInBytes, image.Image.Format));
+            StateHasChanged();
+        }
+    }
+
+    private async Task DownloadImage(string imageId)
+    {
+        var fileStream = new MemoryStream(resizedImages[imageId].ImageInBytes);
+        var fileName = $"{imageId}.{resizedImages[imageId].Format}";
+
+        using var streamRef = new DotNetStreamReference(stream: fileStream);
+
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+    }
+
+    private async Task SendToEmail(string imageId)
+    {
+        if (string.IsNullOrWhiteSpace(Email)) return;
+        var request = new Imager.ImageResizerAggregator.Contracts.Requests.SendImageToEmailRequest(imageId, Email);
+        await ImageService.SendImageToEmailAsync(request);
+    }
+}

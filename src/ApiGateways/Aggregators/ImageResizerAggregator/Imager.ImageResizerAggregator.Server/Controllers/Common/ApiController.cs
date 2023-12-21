@@ -1,4 +1,6 @@
-using Imager.ImageResizerAggregator.Server.Authentication.Constants;
+using System.IdentityModel.Tokens.Jwt;
+
+
 using Imager.ImageResizerAggregator.Server.Authentication.Models;
 
 using Microsoft.AspNetCore.Authorization;
@@ -12,7 +14,7 @@ public abstract class ApiController : ControllerBase
 {
     protected User GetUser()
     {
-        var userId = User.Claims.First(x => x.Type.Equals(UserClaimTypes.Id, StringComparison.Ordinal)).Value;
+        var userId = User.Claims.First(x => x.Type.Equals(JwtRegisteredClaimNames.Sub, StringComparison.Ordinal)).Value;
         return new User(userId);
     }
 }

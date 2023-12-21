@@ -42,7 +42,7 @@ public class ImageController(ISender sender, IImageMapper imageMapper) : ApiCont
 
     [HttpGet("all")]
     public async Task<ActionResult<GetUserImagesResponse>> GetUserImages(
-        GetUserImagesRequest request,
+        [FromQuery] GetUserImagesRequest request,
         CancellationToken cancellationToken)
     {
         var query = _mapper.Map(request);
