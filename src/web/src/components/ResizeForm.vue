@@ -61,30 +61,11 @@
 
 <script>
 // import { inject } from "vue";
-import { useSignalR } from "@quangdao/vue-signalr";
 
 export default {
   name: "ResizeForm",
   setup() {
-    const signalr = useSignalR();
-
-    signalr.on("SendResizedImageInfo", (id) => {
-      const response = fetch(`http://localhost:5000/resize/${id}`, {
-        method: "GET",
-        Authorization: `Bearer ${this.accessToken}`
-      });
-      const imageRes = response.json().then((data) => {
-        return {
-          name: data.imageId,
-          image: atob(data.image.imageInBytes)
-        };
-      });
-      this.gettingImages.push(imageRes);
-    });
-
-    return {
-      signalr
-    };
+    return {};
   },
 
   data() {
