@@ -42,7 +42,7 @@ services:
     ports:
       - "50001:50001" # Dapr grpc
       - "15202:8001" # Admin
-      - "5000:80" # Web http
+      - "5051:80" # Web http
     depends_on:
       imager-pubsub:
         condition: service_healthy
@@ -177,3 +177,8 @@ services:
     volumes:
       - "../../dapr/components/:/components"
       - "../../dapr/configuration/:/configuration"
+
+  client:
+    build:
+      context: ../..
+      dockerfile: src/Web/Dockerfile

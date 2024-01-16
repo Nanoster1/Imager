@@ -4,7 +4,7 @@ using Imager.ImageResizerAggregator.Contracts.Routes;
 
 using Refit;
 
-namespace WebBlazor.Services;
+namespace Imager.Web.Client.Services;
 
 public interface IResizeService
 {

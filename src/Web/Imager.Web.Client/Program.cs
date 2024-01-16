@@ -1,10 +1,10 @@
+using Imager.Web.Client;
+using Imager.Web.Client.Services;
+
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 using Refit;
-
-using WebBlazor;
-using WebBlazor.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

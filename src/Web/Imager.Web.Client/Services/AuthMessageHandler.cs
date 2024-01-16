@@ -1,6 +1,6 @@
 using System.Net.Http.Headers;
 
-namespace WebBlazor.Services;
+namespace Imager.Web.Client.Services;
 
 public class AuthMessageHandler(TokenService tokenService) : DelegatingHandler
 {

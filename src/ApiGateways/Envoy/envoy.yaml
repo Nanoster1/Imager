@@ -37,18 +37,25 @@ static_resources:
                       routes:
                         - name: image-resizer-agg-hub
                           match:
-                            prefix: "/"
+                            prefix: "/api/hub"
                           route:
                             auto_host_rewrite: true
                             cluster: image-resizer-agg
                             timeout: 300s
                         - name: image-resizer-agg
                           match:
-                            prefix: "/app"
+                            prefix: "/api"
                           route:
                             auto_host_rewrite: true
-                            prefix_rewrite: "/v1.0/invoke/image-resizer-agg/method/"
+                            prefix_rewrite: "/v1.0/invoke/image-resizer-agg/method/api"
                             cluster: dapr
+                        - name: client
+                          match:
+                            prefix: "/"
+                          route:
+                            auto_host_rewrite: true
+                            cluster: client
+                            timeout: 300s
                 http_filters:
                   - name: envoy.filters.http.buffer
                     typed_config:
@@ -86,4 +93,17 @@ static_resources:
                   address:
                     socket_address:
                       address: image-resizer-agg
+                      port_value: 80
+    - name: client
+      connect_timeout: 0.25s
+      type: strict_dns
+      lb_policy: round_robin
+      load_assignment:
+        cluster_name: client
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: client
                       port_value: 80

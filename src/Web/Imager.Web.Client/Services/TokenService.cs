@@ -2,7 +2,7 @@ using System.Text.Json;
 
 using Microsoft.JSInterop;
 
-namespace WebBlazor.Services;
+namespace Imager.Web.Client.Services;
 
 public class TokenService(IConfiguration configuration, IJSRuntime jSRuntime)
 {

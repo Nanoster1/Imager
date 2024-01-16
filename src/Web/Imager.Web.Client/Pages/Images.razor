@@ -5,9 +5,9 @@
 
 @page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Images</PageTitle>
 
-@inject ILogger<Home> Logger
+@inject ILogger<Images> Logger
 
 <h3>Upload Images</h3>
 
@@ -95,7 +95,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         hubConnection = new HubConnectionBuilder()
-        .WithUrl("http://localhost:5000/api/hub/resize", options =>
+        .WithUrl("http://localhost:5051/api/hub/resize", options =>
         {
             options.AccessTokenProvider = async () => await TokenService.GetTokenAsync();
         })
@@ -146,6 +146,10 @@ else
     private async Task OnResizeImages()
     {
         resizedImages.Clear();
+        if (Height > 1080 || Width > 1920)
+        {
+            Error = "Width and height must be less than 1920 and 1080";
+        }
         var imageModels = new ImageModel[loadedImages.Count];
         for (var i = 0; i < loadedImages.Count; i++)
         {
